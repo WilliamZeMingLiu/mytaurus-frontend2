@@ -1,0 +1,17 @@
+.dashboard-wrapper {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.split-wrapper {
+	display: flex;
+	justify-content: space-evenly;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+
+.pie-wrapper {
+	width: 35%;
+	text-align: center;
+}

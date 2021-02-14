@@ -1,0 +1,27 @@
+.button-wrapper-1 {
+	display: flex;
+	justify-content: space-evenly;
+	margin-bottom: 30px;
+}
+
+.button {
+	text-align: center;
+	padding: 12px;
+	border: solid transparent 3px;
+	border-radius: 10px;
+	background-color: #33373a;
+}
+
+.button h2 {
+	color: #ffffff;
+}
+
+.button h4 {
+	color: #9b9da0;
+}
+
+.button:hover {
+	border-color: #337cf6 !important;
+	transition: 0.5s !important;
+	cursor: pointer !important;
+}
