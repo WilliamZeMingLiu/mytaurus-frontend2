@@ -1,25 +1,47 @@
 import './HomeButtons.css';
+import React, { Component } from "react";
+import { Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-function HomeButtons() {
-	return (
-		<div className="button-wrapper-1">
-			<div className="button">
-				<h4>Crypto</h4>
-				<h2>$34,398.01</h2>
-			</div>
-			<div className="button">
-				<h4>Stock</h4>
-				<h2>$60,393.40</h2>
-			</div>
-			<div className="button" style={{border: "solid #9b9da0 3px"}}>
-				<h4><u>Total Assets</u></h4>
-				<h2>$110,393.32</h2>
-			</div>
-		</div>	
-	);
+const useStyles = theme => ({
+  margin: {
+    margin: theme.spacing(1),
+    marginRight: theme.spacing(3),
+    marginLeft: theme.spacing(3),
+  },
+});
+
+
+class HomeButtons extends Component {
+	render(){
+		const { classes } = this.props;
+		return (
+			<div className="button-wrapper-1">
+				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
+					Crypto
+					<br />
+					$34,398.01
+				</Button>
+				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
+					Stock
+					<br />
+					$60,393.40
+				</Button>
+				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
+					Total Assets
+					<br />
+					{ this.props.portfolioValue == null ? "" : "$" + this.props.portfolioValue[this.props.portfolioValue.length-1].value }
+				</Button>
+			</div>	
+		);
+	}
 }
 
-export default HomeButtons;
+export default withStyles(useStyles)(HomeButtons);
+
+
+
+
 
 
 

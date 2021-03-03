@@ -8,7 +8,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 class PieGraph extends Component {
 	render() {
 		const options = {
-			theme: "dark2",
+			theme: "light1",
 			animationEnabled: true,
 			title: {
 			},
@@ -31,7 +31,7 @@ class PieGraph extends Component {
 			}]
 		}
 		return (
-		<div>
+		<div className="pie-wrapper">
 			<CanvasJSChart options = {options}/>
 		</div>
 		);

@@ -1,0 +1,32 @@
+import React, { useEffect, useState } from "react";
+import firebase from "firebase";
+
+//https://stackoverflow.com/questions/60156164/how-to-stop-firebase-re-auth-on-every-page-reload-in-a-react-app
+//Auth API
+export const AuthContext = React.createContext();
+
+export const AuthProvider = ({ children }) => {
+	//const [currentUser, setCurrentUser] = useState(null);
+
+	useEffect(() => {
+		firebase.auth().onAuthStateChanged(user => {
+			if(user) {
+				localStorage.setItem('currentUser', true);
+			}
+			else {
+				localStorage.removeItem('currentUser');
+			}
+		});
+	}, []); 
+
+	const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+	return (
+		<AuthContext.Provider
+			value={{
+				currentUser
+			}}
+		>
+			{children}
+		</AuthContext.Provider>
+	);
+}

@@ -1,7 +1,11 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,8 +19,21 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import SettingsIcon from '@material-ui/icons/Settings';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import InfoIcon from '@material-ui/icons/Info';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import HistoryIcon from '@material-ui/icons/History';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+
+import { auth } from '../firebase.js';
+import { Redirect, useHistory } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -77,10 +94,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PersistentDrawerLeft() {
+export default function NavBar() {
+  //Routing
+  const history = useHistory();
+
+  async function renderSignOut() {
+    await auth.signOut();
+    history.push("/login");
+  }
+
+
+  //Material-UI functions
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [drop, setDrop] = React.useState(false);
+
+  const handleDrop = () => {
+    setDrop(!drop);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -109,11 +141,18 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
-            Persistent drawer
+          <Typography variant="h5" noWrap style={{ flexGrow: 1 }}>
+            MyTaurus
           </Typography>
+
+          <IconButton onClick={() => renderSignOut()}
+           color="inherit" aria-label="account">
+            <AccountCircleIcon fontSize="large"/>
+          </IconButton>
+          
         </Toolbar>
       </AppBar>
+
       <Drawer
         className={classes.drawer}
         variant="persistent"
@@ -129,54 +168,77 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </div>
         <Divider />
+
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem>
+            <ListItemText primary="Your Portfolio"/>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
+            <ListItemText primary="$110,392.23"/>
+          </ListItem>
         </List>
         <Divider />
+
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+          <ListItem button>
+            <ListItemIcon><AccountBalanceIcon/></ListItemIcon>
+            <ListItemText primary="Balance" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><HistoryIcon/></ListItemIcon>
+            <ListItemText primary="Asset History" />
+          </ListItem>
+          <ListItem button onClick={handleDrop}>
+            <ListItemIcon>
+              <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Analytics" />
+            {drop ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={drop} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
+                <ListItemText primary="Finance" />
+              </ListItem>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon><DirectionsCarIcon /></ListItemIcon>
+                <ListItemText primary="Vehicles" />
+              </ListItem>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon><DoubleArrowIcon /></ListItemIcon>
+                <ListItemText primary="Trigger" />
+              </ListItem>
+            </List>
+          </Collapse>
+        </List>  
+        <Divider />
+
+        <List>
+          <ListItem button>
+            <ListItemIcon><SettingsIcon/></ListItemIcon>
+            <ListItemText primary="Settings" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><InfoIcon/></ListItemIcon>
+            <ListItemText primary="About" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon><HelpOutlineIcon/></ListItemIcon>
+            <ListItemText primary="Help" />
+          </ListItem>
+        </List>        
       </Drawer>
+     
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
         <div className={classes.drawerHeader} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-          facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-          gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-          donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-          Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-          imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-          arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-          donec massa sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-          facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-          tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-          consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-          vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-          hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-          tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-          nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-          accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
       </main>
+
     </div>
   );
 }

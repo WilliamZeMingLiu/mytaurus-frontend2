@@ -1,18 +1,32 @@
+import React, { Component } from "react";
 import logo from '../logo.svg';
 import './App.css';
-import Header from '../Header/Header.js';
-import Footer from '../Footer/Footer.js';
-import Dashboard from '../Dashboard/Dashboard.js';
-//import Drawer from '../Drawer/Drawer';
+import Home from '../Home/Home.js';
+import AuthForm from '../AuthForm/AuthForm.js';
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import PrivateRoute from '../PrivateRoute';
+import firebase from "firebase";
+import { AuthProvider } from '../Auth';
 
-function App() {
-  return (
-    <div className="App">
-      <Header />
-      <Dashboard />
-      <Footer />
-    </div>
-  );
+
+export default class App extends Component {
+  render() {
+	return (
+	<AuthProvider>
+	  <div className="App">
+	  	<BrowserRouter>
+	  		<PrivateRoute exact path="/" component={Home} />
+	  		<Route path="/login" component={AuthForm} />
+	  	</BrowserRouter>
+	  </div>
+	</AuthProvider>
+	);
+  }
 }
 
-export default App;
+
+
+
+
+
+

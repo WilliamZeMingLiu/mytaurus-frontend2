@@ -5,43 +5,39 @@ import './LineGraph.css';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class LineGraph extends Component{
+export default class LineGraph extends Component{
 	constructor() {
 		super();
 		this.generateDataPoints = this.generateDataPoints.bind(this);
 	}
 	
-	generateDataPoints(noOfDps) {
-		var xVal = 1, yVal = 100;
+	generateDataPoints() {
 		var dps = [];
-		for(var i = 0; i < noOfDps; i++) {
-			yVal = yVal +  Math.round(5 + Math.random() *(-5-5));
-			dps.push({x: xVal,y: yVal});	
-			xVal++;
+		if(this.props.portfolioValue != null){
+			var noOfDps = this.props.portfolioValue.length;
+			this.props.portfolioValue.map((obj) => {
+				dps.push({label:obj.date, y:obj.value})
+			})
 		}
 		return dps;
 	}
 	
 	render() {
 		const options = {
-			theme: "dark2", // "light1", "dark1", "dark2"
+			theme: "light1", // "light1", "dark1", "dark2"
 			animationEnabled: true,
 			zoomEnabled: true,
-			title: {
-				text: "+$1,7584.23 (+12.34%)"
-			},
 			data: [{
 				type: "area",
-				dataPoints: this.generateDataPoints(500)
+				dataPoints: this.generateDataPoints()
 			}]
 		}
 		
 		return (
-		<div>
-			<CanvasJSChart options = {options}/>
-		</div>
+			<div className="wrapper">
+				<h1>+$1,7584.23 (+12.34%)</h1>
+				<CanvasJSChart options = {options}/>
+			</div>
 		);
 	}
 }
-
-export default LineGraph;
