@@ -13,6 +13,31 @@ const useStyles = theme => ({
 
 
 class HomeButtons extends Component {
+	generateTotalValue() {
+		var total = null;
+		if(this.props.portfolioValue != null){
+			total = this.props.portfolioValue[this.props.portfolioValue.length-1].value;
+		}
+		return total;
+	}
+	generateStockValue() {
+		var stock = null;
+		if(this.props.stock != null){
+			this.props.stock.map((obj) => {
+				stock += obj.buyPrice * obj.shares;
+			})
+		}
+		return stock;
+	}
+	generateCryptoValue() {
+		var crypto = null;
+		if(this.props.crypto != null){
+			this.props.crypto.map((obj) => {
+				crypto += obj.buyPrice * obj.amount;
+			})
+		}
+		return crypto;
+	}
 	render(){
 		const { classes } = this.props;
 		return (
@@ -20,17 +45,17 @@ class HomeButtons extends Component {
 				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
 					Crypto
 					<br />
-					$34,398.01
+					{ "$" + this.generateStockValue() }
 				</Button>
 				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
 					Stock
 					<br />
-					$60,393.40
+					{ "$" + this.generateCryptoValue() }
 				</Button>
 				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
 					Total Assets
 					<br />
-					{ this.props.portfolioValue == null ? "" : "$" + this.props.portfolioValue[this.props.portfolioValue.length-1].value }
+					{ "$" + this.generateTotalValue() }
 				</Button>
 			</div>	
 		);

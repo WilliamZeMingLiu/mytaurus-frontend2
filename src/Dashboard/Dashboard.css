@@ -1,0 +1,10 @@
+.dashboard-wrapper {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.split-wrapper {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 50px;
+}

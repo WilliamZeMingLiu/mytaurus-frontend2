@@ -1,12 +1,8 @@
 import './Home.css';
 import React, { Component } from "react";
-import Footer from '../Footer/Footer.js';
+import Footer from '../Footer/Footer';
 import NavBar from '../NavBar/NavBar';
-import HomeTable from '../HomeTable/HomeTable';
-import HomeButtons from '../HomeButtons/HomeButtons';
-import LineGraph from '../LineGraph/LineGraph';
-import GraphTab from '../GraphTab/GraphTab';
-
+import Dashboard from '../Dashboard/Dashboard';
 
 export default class Home extends Component {
   constructor(props) {
@@ -44,15 +40,7 @@ export default class Home extends Component {
   render(){
   	return (
 	    <div className="Home">
-	      <NavBar />
-	      <div className="dashboard-wrapper">
-				<HomeButtons portfolioValue={this.state.portfolioValue} />
-				<LineGraph portfolioValue={this.state.portfolioValue} />
-				<div className="split-wrapper">
-					<HomeTable stock={this.state.stock} crypto={this.state.crypto} />
-					<GraphTab />
-				</div>
-			</div>
+	      <NavBar component={Dashboard}/>
 	      <Footer />
 	    </div>
 	  );

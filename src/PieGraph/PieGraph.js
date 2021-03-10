@@ -5,10 +5,49 @@ import './PieGraph.css';
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class PieGraph extends Component {
+function compareDataPointYAscend(dataPoint1, dataPoint2) {
+		return dataPoint1.y - dataPoint2.y;
+}
+
+function compareDataPointYDescend(dataPoint1, dataPoint2) {
+		return dataPoint2.y - dataPoint1.y;
+}
+
+export default class PieGraph extends Component {
+	constructor() {
+		super();
+		this.generateDataPoints = this.generateDataPoints.bind(this);
+	}
+
+	generateDataPoints() {
+		var dps = [];
+		if(this.props.portfolioValue != null){
+			var portfolioValue = this.props.portfolioValue[this.props.portfolioValue.length-1].value
+			if(this.props.stock != null){
+				this.props.stock.map((obj) => {
+					var y_value = obj.buyPrice*obj.shares;
+					y_value /= portfolioValue
+					y_value = y_value*100;
+					console.log(y_value);
+					dps.push({y:y_value, name:obj.symbol})
+				})
+			}
+			if(this.props.crypto != null){
+				this.props.crypto.map((obj) => {
+					var y_value = obj.buyPrice*obj.amount;
+					y_value /= portfolioValue
+					y_value = y_value*100;
+					console.log(y_value);
+					dps.push({y:y_value, name:obj.name})
+				})
+			}
+		}
+		return dps;
+	}
+
 	render() {
 		const options = {
-			theme: "light1",
+			theme: "light2",
 			animationEnabled: true,
 			title: {
 			},
@@ -21,20 +60,17 @@ class PieGraph extends Component {
 				type: "doughnut",
 				showInLegend: true,
 				yValueFormatString: "#,###'%'",
-				dataPoints: [
-					{ name: "BTC", y: 5 },
-					{ name: "DOGE", y: 31 },
-					{ name: "ETH", y: 40 },
-					{ name: "BB", y: 17 },
-					{ name: "VTI", y: 7 }
-				]
+				//5, 31, 40, 17, 7
+				dataPoints: this.generateDataPoints()
 			}]
 		}
+		options.data[0].dataPoints.sort(compareDataPointYDescend);
+		
 		return (
-		<div className="pie-wrapper">
-			<CanvasJSChart options = {options}/>
-		</div>
+			<div className="pie-wrapper">
+				<CanvasJSChart options = {options}/>
+			</div>
 		);
 	}
 }
-export default PieGraph;     
+   

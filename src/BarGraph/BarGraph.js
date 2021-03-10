@@ -1,12 +1,38 @@
+import React, { Component } from "react";
 import CanvasJSReact from '../assets/canvasjs.react';
-var React = require('react');
-var Component = React.Component;
-
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-class BarGraph extends Component {
+function compareDataPointYAscend(dataPoint1, dataPoint2) {
+		return dataPoint1.y - dataPoint2.y;
+}
+
+function compareDataPointYDescend(dataPoint1, dataPoint2) {
+		return dataPoint2.y - dataPoint1.y;
+}
+
+export default class BarGraph extends Component {
+	constructor() {
+		super();
+		this.generateDataPoints = this.generateDataPoints.bind(this);
+	}
+
+	generateDataPoints() {
+		var dps = [];
+		if(this.props.stock != null){
+			this.props.stock.map((obj) => {
+				dps.push({y:obj.buyPrice*obj.shares, label:obj.symbol})
+			})
+		}
+		if(this.props.crypto != null){
+			this.props.crypto.map((obj) => {
+				dps.push({y:obj.buyPrice*obj.amount, label:obj.name})
+			})
+		}
+		return dps;
+	}
+
 	render() {
 		const options = {
 			animationEnabled: true,
@@ -20,15 +46,11 @@ class BarGraph extends Component {
 			},
 			data: [{
 				type: "bar",
-				dataPoints: [
-					{ y:  1000000000, label: "BTC" },
-					{ y:  1800000000, label: "DOGE" },
-					{ y:  563000000, label: "ETH" },
-					{ y:  376000000, label: "BB" },
-					{ y:  336000000, label: "VTI" },
-				]
+				dataPoints: this.generateDataPoints()
 			}]
 		}
+		options.data[0].dataPoints.sort(compareDataPointYDescend);
+
 		return (
 			<div className="bar-wrapper">
 				<CanvasJSChart options = {options}/>
@@ -44,4 +66,3 @@ class BarGraph extends Component {
 		return "$" + CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
 	}
 }
-export default BarGraph 
