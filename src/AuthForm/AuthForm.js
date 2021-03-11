@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 
 import { auth, authUI } from "../firebase";
 
+import firebase from "firebase"
+
 import "./AuthForm.css";
 import Home from "../Home/Home";
 
-import firebase from "firebase";
 import { Redirect } from 'react-router-dom';
 
 import { withRouter } from "react-router";
