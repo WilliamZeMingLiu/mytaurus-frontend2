@@ -121,6 +121,10 @@ export default function NavBar({ component: RouteComponent}) {
               <ListItemIcon><HistoryIcon/></ListItemIcon>
               <ListItemText primary="Asset History" />
             </ListItem>
+            <ListItem button component="a" href="http://localhost:3000/addasset">
+              <ListItemIcon><AccountBalanceWalletIcon/></ListItemIcon>
+              <ListItemText primary="Manage Assets" />
+            </ListItem>
             <ListItem button onClick={handleDrop}>
               <ListItemIcon>
                 <BarChartIcon />
@@ -144,7 +148,7 @@ export default function NavBar({ component: RouteComponent}) {
                 </ListItem>
               </List>
             </Collapse>
-          </List>  
+          </List>
           <Divider />
 
           <List>
@@ -160,7 +164,7 @@ export default function NavBar({ component: RouteComponent}) {
               <ListItemIcon><HelpOutlineIcon/></ListItemIcon>
               <ListItemText primary="Help" />
             </ListItem>
-          </List>    
+          </List>
         </div>
       </Drawer>
       <main className={classes.content}>
@@ -231,7 +235,7 @@ export default function NavBar() {
       <CssBaseline />
       <AppBar
         position="fixed"
-        className={clsx(classes.appBar, 
+        className={clsx(classes.appBar,
           {[classes.appBarShift]: open,}
         )}
       >
@@ -245,17 +249,17 @@ export default function NavBar() {
           >
             <MenuIcon />
           </IconButton>
-          
+
           <Typography variant="h5" noWrap style={{ flexGrow: 1 }}>
             MyTaurus
           </Typography>
-          
+
 
           <IconButton onClick={() => renderSignOut()}
            color="inherit" aria-label="account">
             <AccountCircleIcon fontSize="large"/>
           </IconButton>
-          
+
         </Toolbar>
       </AppBar>
 
@@ -321,7 +325,7 @@ export default function NavBar() {
               </ListItem>
             </List>
           </Collapse>
-        </List>  
+        </List>
         <Divider />
 
         <List>
@@ -337,9 +341,9 @@ export default function NavBar() {
             <ListItemIcon><HelpOutlineIcon/></ListItemIcon>
             <ListItemText primary="Help" />
           </ListItem>
-        </List>        
+        </List>
       </Drawer>
-     
+
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,

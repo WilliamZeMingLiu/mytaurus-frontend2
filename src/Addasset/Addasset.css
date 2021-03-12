@@ -1,0 +1,21 @@
+.Addasset-wrapper {
+	width: 100%;
+	margin: 0 auto;
+  vertical-align: middle;
+  justify-content: space-between;
+  margin-left: 27%;
+}
+
+.addbutton-wrapper
+{
+  margin-left: 15%;
+  padding-top: 30px;
+
+}
+
+.split-wrapper {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 50px;
+
+}

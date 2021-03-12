@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Footer from '../Footer/Footer';
 import NavBar from '../NavBar/NavBar';
 import Dashboard from '../Dashboard/Dashboard';
+import Addasset from '../Addasset/Addasset'
 
 export default class Home extends Component {
   constructor(props) {
@@ -24,26 +25,26 @@ export default class Home extends Component {
 	  fetch(stockURL),
 	  fetch(cryptoURL)
 	])
-	  .then(([res1, res2, res3]) => 
+	  .then(([res1, res2, res3]) =>
 	  	Promise.all([res1.json(), res2.json(), res3.json()]))
-	  .then(([data1, data2, data3]) => 
-	   { 
-	    this.setState({ 
+	  .then(([data1, data2, data3]) =>
+	   {
+	    this.setState({
 	    	portfolioValue:data1,
 	    	stock:data2,
 	    	crypto:data3
 	    });
 	   });
-	  
+
   }
 
   render(){
   	return (
 	    <div className="Home">
 	      <NavBar component={Dashboard}/>
+        <NavBar component={Addasset}/>
 	      <Footer />
 	    </div>
 	  );
   }
 }
-

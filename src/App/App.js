@@ -3,6 +3,7 @@ import logo from '../logo.svg';
 import './App.css';
 import Home from '../Home/Home.js';
 import AuthForm from '../AuthForm/AuthForm.js';
+import Addasset from '../Addasset/Addasset.js';
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from '../PrivateRoute';
 import firebase from "firebase";
@@ -17,16 +18,10 @@ export default class App extends Component {
 	  	<BrowserRouter>
 	  		<PrivateRoute exact path="/" component={Home} />
 	  		<Route path="/login" component={AuthForm} />
+        <Route path="/addasset" component={Addasset}/>
 	  	</BrowserRouter>
 	  </div>
 	</AuthProvider>
 	);
   }
 }
-
-
-
-
-
-
-

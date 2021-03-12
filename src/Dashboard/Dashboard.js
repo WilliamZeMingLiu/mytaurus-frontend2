@@ -27,11 +27,11 @@ export default class Dashboard extends Component {
 	  fetch(stockURL),
 	  fetch(cryptoURL)
 	])
-	  .then(([res1, res2, res3]) => 
+	  .then(([res1, res2, res3]) =>
 	  	Promise.all([res1.json(), res2.json(), res3.json()]))
-	  .then(([data1, data2, data3]) => 
-	   { 
-	    this.setState({ 
+	  .then(([data1, data2, data3]) =>
+	   {
+	    this.setState({
 	    	portfolioValue:data1,
 	    	stock:data2,
 	    	crypto:data3

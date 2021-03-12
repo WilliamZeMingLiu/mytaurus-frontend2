@@ -33,13 +33,14 @@ function renderLoggedIn() {
 function AuthForm() {
   const [isLogin, setIsLogin] = useState(true);
   const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
-  
+
   auth.onAuthStateChanged((user) => setUser(user));
 
   useEffect(() => {
@@ -75,6 +76,11 @@ function AuthForm() {
               </Menu>
               {isLogin ? (
                 <Fragment>
+                {error !== null && (
+                     <div className="py-4 bg-red-600 w-full text-white text-center mb-3">
+                       {error}
+                     </div>
+                   )}
                   <Form>
                     <Form.Field className="auth-form-fields">
                       <label className="form-labels">Email</label>
