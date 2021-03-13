@@ -27,16 +27,11 @@ export default class Home extends Component {
 
 	componentDidMount() {
 		const {currentUser} = this.context;
-		console.log(currentUser);
-
-
-
-			currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
-
-		
+		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));		
 	}
 
 	loadData(token) {
+		console.log(token)
 		const valueURL = "https://my-taurus.herokuapp.com/values";
 		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
@@ -53,7 +48,6 @@ export default class Home extends Component {
 			axios.get(cryptoURL, config)
 		])
 		.then(responseArr => {
-			console.log(responseArr[0])
 			this.setState({
 				initializing: false,
 				portfolioValue: responseArr[0].data,
