@@ -1,5 +1,5 @@
 import './GraphTab.css';
-import React from 'react';
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -54,30 +54,37 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function GraphTab() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+class GraphTab extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      value:0
+    }
+  }
 
-  const handleChange = (event, newValue) => {
-  setValue(newValue);
-  };
+  render(){
+    const handleChange = (event, newValue) => {
+      this.setState({value: newValue});
+    };
 
-  return(
-    <div className="graph-wrapper">
-      <AppBar position="static" color="primary">
-        <Tabs variant="fullWidth" centered value={value} onChange={handleChange} aria-label="table tabs">
-          <Tab icon={<BarChartIcon fontSize='large' />} {...a11yProps(0)} />
-          <Tab icon={<PieChartIcon fontSize='large' />} {...a11yProps(1)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-          <BarGraph />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-          <PieGraph />
-      </TabPanel>
-    </div>
-  );
+    return(
+      <div className="graph-wrapper">
+        <AppBar position="static" color="primary">
+          <Tabs variant="fullWidth" centered value={this.state.value} onChange={handleChange} aria-label="table tabs">
+            <Tab icon={<BarChartIcon fontSize='large' />} {...a11yProps(0)} />
+            <Tab icon={<PieChartIcon fontSize='large' />} {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={this.state.value} index={0}>
+            <BarGraph stock={this.props.stock} crypto={this.props.crypto} />
+        </TabPanel>
+        <TabPanel value={this.state.value} index={1}>
+            <PieGraph stock={this.props.stock} crypto={this.props.crypto} portfolioValue={this.props.portfolioValue} />
+        </TabPanel>
+      </div>
+    );
+  }
+  
 }
 
 export default GraphTab;

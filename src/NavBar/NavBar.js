@@ -31,35 +31,19 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
+import Dashboard from '../Dashboard/Dashboard';
 
 import { auth } from '../firebase.js';
 import { Redirect, useHistory } from 'react-router-dom';
 
-const drawerWidth = 240;
+const drawerWidth = 190;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
   appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  hide: {
-    display: 'none',
+    zIndex: theme.zIndex.drawer + 1,
   },
   drawer: {
     width: drawerWidth,
@@ -68,31 +52,154 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+  drawerContainer: {
+    overflow: 'auto',
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
   },
 }));
+
+export default function NavBar({ component: RouteComponent}) {
+  const classes = useStyles();
+  const [drop, setDrop] = React.useState(false);
+
+
+  //Routing
+  const history = useHistory();
+
+  async function renderSignOut() {
+    await auth.signOut();
+    history.push("/login");
+  }
+
+  const handleDrop = () => {
+    setDrop(!drop);
+  };
+
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h5" noWrap style={{ flexGrow: 1 }}>
+            MyTaurus
+          </Typography>
+          <IconButton onClick={() => renderSignOut()}
+           color="inherit" aria-label="account">
+            <AccountCircleIcon fontSize="large"/>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+          <List>
+            <ListItem>
+              <ListItemText primary="Your Portfolio"/>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
+              <ListItemText primary="$110,392.23"/>
+            </ListItem>
+          </List>
+          <Divider />
+
+          <List>
+            <ListItem button>
+              <ListItemIcon><AccountBalanceIcon/></ListItemIcon>
+              <ListItemText primary="Balance" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon><HistoryIcon/></ListItemIcon>
+              <ListItemText primary="Asset History" />
+            </ListItem>
+            <ListItem button component="a" href="http://localhost:3000/addasset">
+              <ListItemIcon><AccountBalanceWalletIcon/></ListItemIcon>
+              <ListItemText primary="Manage Assets" />
+            </ListItem>
+            <ListItem button onClick={handleDrop}>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary="Analytics" />
+              {drop ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={drop} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
+                  <ListItemText primary="Finance" />
+                </ListItem>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon><DirectionsCarIcon /></ListItemIcon>
+                  <ListItemText primary="Vehicles" />
+                </ListItem>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon><DoubleArrowIcon /></ListItemIcon>
+                  <ListItemText primary="Trigger" />
+                </ListItem>
+              </List>
+            </Collapse>
+          </List>
+          <Divider />
+
+          <List>
+            <ListItem button>
+              <ListItemIcon><SettingsIcon/></ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon><InfoIcon/></ListItemIcon>
+              <ListItemText primary="About" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon><HelpOutlineIcon/></ListItemIcon>
+              <ListItemText primary="Help" />
+            </ListItem>
+          </List>
+        </div>
+      </Drawer>
+      <main className={classes.content}>
+        <Toolbar />
+        <RouteComponent />
+      </main>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 export default function NavBar() {
   //Routing
@@ -107,14 +214,14 @@ export default function NavBar() {
   //Material-UI functions
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const [drop, setDrop] = React.useState(false);
 
   const handleDrop = () => {
     setDrop(!drop);
   };
 
-  const handleDrawerOpen = () => {
+  /*const handleDrawerOpen = () => {
     setOpen(true);
   };
 
@@ -122,34 +229,37 @@ export default function NavBar() {
     setOpen(false);
   };
 
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
+        className={clsx(classes.appBar,
+          {[classes.appBarShift]: open,}
+        )}
       >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            //onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, open && classes.hide)}
           >
             <MenuIcon />
           </IconButton>
+
           <Typography variant="h5" noWrap style={{ flexGrow: 1 }}>
             MyTaurus
           </Typography>
+
 
           <IconButton onClick={() => renderSignOut()}
            color="inherit" aria-label="account">
             <AccountCircleIcon fontSize="large"/>
           </IconButton>
-          
+
         </Toolbar>
       </AppBar>
 
@@ -162,11 +272,14 @@ export default function NavBar() {
           paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </div>
+        <IconButton onClick={handleDrawerClose}>
+          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </IconButton>
+
+        <h1>
+          MyTaurus
+        </h1>
+
         <Divider />
 
         <List>
@@ -212,7 +325,7 @@ export default function NavBar() {
               </ListItem>
             </List>
           </Collapse>
-        </List>  
+        </List>
         <Divider />
 
         <List>
@@ -228,17 +341,19 @@ export default function NavBar() {
             <ListItemIcon><HelpOutlineIcon/></ListItemIcon>
             <ListItemText primary="Help" />
           </ListItem>
-        </List>        
+        </List>
       </Drawer>
-     
+
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
         <div className={classes.drawerHeader} />
+        <Dashboard />
       </main>
 
     </div>
   );
 }
+*/
