@@ -1,44 +1,69 @@
 import './Home.css';
 import React, { Component } from "react";
-import Footer from '../Footer/Footer';
+import axios from 'axios';
+import Footer from '../Footer/Footer.js';
 import NavBar from '../NavBar/NavBar';
+import HomeTable from '../HomeTable/HomeTable';
+import HomeButtons from '../HomeButtons/HomeButtons';
+import LineGraph from '../LineGraph/LineGraph';
+import GraphTab from '../GraphTab/GraphTab';
+import { auth } from '../firebase';
+import { useContext } from 'react';
+import { AuthContext } from '../Auth';
 import Dashboard from '../Dashboard/Dashboard';
-import Addasset from '../Addasset/Addasset'
+import Addasset from '../Addasset/Addasset';
 
 export default class Home extends Component {
-  constructor(props) {
-  	super(props);
-  	this.state = {
-  		portfolioValue:null,
-  		stock:null,
-  		crypto:null
-  	}
-  }
+	static contextType = AuthContext;
 
-  componentDidMount() {
-  	const valueURL = "https://my-taurus.herokuapp.com/values";
-  	const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
-  	const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
+	constructor(props) {
+		super(props);
+		this.state = {
+			initializing: true,
+			portfolioValue: null,
+			stock: null,
+			crypto: null
+		};
+	}
 
-	Promise.all([
-	  fetch(valueURL),
-	  fetch(stockURL),
-	  fetch(cryptoURL)
-	])
-	  .then(([res1, res2, res3]) =>
-	  	Promise.all([res1.json(), res2.json(), res3.json()]))
-	  .then(([data1, data2, data3]) =>
-	   {
-	    this.setState({
-	    	portfolioValue:data1,
-	    	stock:data2,
-	    	crypto:data3
-	    });
-	   });
+	componentDidMount() {
+		const {currentUser} = this.context;
+		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));		
+	}
 
-  }
+	loadData(token) {
+		console.log(token)
+		const valueURL = "https://my-taurus.herokuapp.com/values";
+		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
+		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
 
-  render(){
+		let config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		}
+
+		axios.all([
+			axios.get(valueURL, config),
+			axios.get(stockURL, config),
+			axios.get(cryptoURL, config)
+		])
+		.then(responseArr => {
+			this.setState({
+				initializing: false,
+				portfolioValue: responseArr[0].data,
+				stock: responseArr[1].data,
+				crypto: responseArr[2].data
+			});
+
+		});
+	}
+
+	render() {
+		if (this.state.initializing) {
+			return <div />
+		}
+
   	return (
 	    <div className="Home">
 	      <NavBar component={Dashboard}/>

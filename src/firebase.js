@@ -13,8 +13,10 @@ const firebaseConfig = {
 };
 
 
-firebase.initializeApp(firebaseConfig);
+export const app = firebase.initializeApp(firebaseConfig);
+app.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+
 firebase.analytics();
 
-export const auth = firebase.auth();
+export const auth = app.auth();
 export const authUI = new firebaseui.auth.AuthUI(auth);
