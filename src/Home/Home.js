@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import axios from 'axios';
 import Footer from '../Footer/Footer.js';
 import NavBar from '../NavBar/NavBar';
-import HomeTable from '../HomeTable/HomeTable';
+//import HomeTable from '../HomeTable/HomeTable';
 import HomeButtons from '../HomeButtons/HomeButtons';
 import LineGraph from '../LineGraph/LineGraph';
 import GraphTab from '../GraphTab/GraphTab';

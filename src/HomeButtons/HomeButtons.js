@@ -14,11 +14,7 @@ const useStyles = theme => ({
 
 class HomeButtons extends Component {
 	generateTotalValue() {
-		var total = null;
-		if(this.props.portfolioValue != null){
-			total = this.props.portfolioValue[this.props.portfolioValue.length-1].value;
-		}
-		return total;
+		return this.props.portfolioValue;
 	}
 	generateStockValue() {
 		var stock = null;
