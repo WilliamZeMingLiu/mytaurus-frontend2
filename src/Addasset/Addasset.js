@@ -19,6 +19,7 @@ export default class Addasset extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+      token: null,
 			initializing: true,
 			portfolioValue: null,
 			stock: null,
@@ -50,6 +51,7 @@ export default class Addasset extends Component {
 		])
 			.then(responseArr => {
 				this.setState({
+          token: token,
 					initializing: false,
 					portfolioValue: 0, /* generate portfolio value dynamically*/
 					stock: responseArr[0].data,
@@ -58,6 +60,39 @@ export default class Addasset extends Component {
 
 			});
 	}
+
+  addStock(token, symbol, shares) {
+    const url = 'https://my-taurus.herokuapp.com/stocks/add'
+
+    const params = new URLSearchParams();
+    params.append('symbol', symbol);
+    params.append('shares', shares);
+
+    const config = {
+			headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+				'Authorization': `Bearer ${token}`
+			}
+		}
+
+    axios.post(url, params, config);
+  }
+
+  removeStock(token, symbol) {
+    const url = 'https://my-taurus.herokuapp.com/stocks/remove'
+
+    const params = new URLSearchParams();
+    params.append('symbol', symbol);
+
+    const config = {
+			headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+				'Authorization': `Bearer ${token}`
+			}
+		}
+
+    axios.post(url, params, config);
+  }
 
 	render() {
 		if (this.state.initializing) {
