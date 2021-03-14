@@ -16,97 +16,109 @@ import axios from 'axios';
 export default class Addasset extends Component {
   static contextType = AuthContext;
 
-	constructor(props) {
-		super(props);
-		this.state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       token: null,
-			initializing: true,
-			portfolioValue: null,
-			stock: null,
-			crypto: null,
+      initializing: true,
+      portfolioValue: null,
+      stock: null,
+      crypto: null,
       symbol: null,
       shares: null
-		};
-	}
+    };
 
-	componentDidMount() {
-		const { currentUser } = this.context;
-		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
-	}
+    this.addStock = this.addStock.bind(this);
+    this.removeStock = this.removeStock.bind(this);
+  }
 
-	loadData(token) {
-		console.log(token)
-		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
-		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
+  componentDidMount() {
+    const { currentUser } = this.context;
+    currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
+  }
 
-		let config = {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		}
+  loadData(token) {
+    console.log(token)
+    const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
+    const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
 
-		axios.all([
-			axios.get(stockURL, config),
-			axios.get(cryptoURL, config)
-		])
-			.then(responseArr => {
-				this.setState({
+    let config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    axios.all([
+      axios.get(stockURL, config),
+      axios.get(cryptoURL, config)
+    ])
+      .then(responseArr => {
+        this.setState({
           token: token,
-					initializing: false,
-					portfolioValue: 0, /* generate portfolio value dynamically*/
-					stock: responseArr[0].data,
-					crypto: responseArr[1].data
-				});
+          initializing: false,
+          portfolioValue: 0, /* generate portfolio value dynamically*/
+          stock: responseArr[0].data,
+          crypto: responseArr[1].data
+        });
 
-			});
-	}
+      });
+  }
 
-  addStock(token, symbol, shares) {
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  async addStock(e) {
+    e.preventDefault();
+    console.log("add stock called");
     const url = 'https://my-taurus.herokuapp.com/stocks/add'
 
     const params = new URLSearchParams();
-    params.append('symbol', symbol);
-    params.append('shares', shares);
+    params.append('symbol', this.state.symbol);
+    params.append('shares', this.state.shares);
 
     const config = {
-			headers: {
+      headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': `Bearer ${token}`
-			}
-		}
+        'Authorization': `Bearer ${this.state.token}`
+      }
+    }
 
-    axios.post(url, params, config);
+    await axios.post(url, params, config);
+    this.loadData(this.state.token);
   }
 
-  removeStock(token, symbol) {
+  async removeStock(e) {
+    e.preventDefault();
     const url = 'https://my-taurus.herokuapp.com/stocks/remove'
 
     const params = new URLSearchParams();
-    params.append('symbol', symbol);
+    params.append('symbol', this.state.symbol);
 
     const config = {
-			headers: {
+      headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': `Bearer ${token}`
-			}
-		}
+        'Authorization': `Bearer ${this.state.token}`
+      }
+    }
 
-    axios.post(url, params, config);
+    await axios.post(url, params, config);
+    this.loadData(this.state.token);
   }
 
-	render() {
-		if (this.state.initializing) {
-			return <div />
-		}
-    return(
+  render() {
+    if (this.state.initializing) {
+      return <div />
+    }
+    return (
       <div className="Addasset-wrapper">
         <AssetTableTab stock={this.state.stock} crypto={this.state.crypto} />
         <div className="addbutton-wrapper">
           <Popup trigger={<button > Add Asset </button>} position="right center">
-            <div><form>
+            <div><form onSubmit={this.addStock}>
               <label>
                 Asset Symbol:
-              <input type="text" name="symbol" defaultValue={this.symbol} onChange={this.handleChange} />
+              <input type="text" name="symbol" value={this.state.symbol} onChange={this.handleChange} />
               </label>
             &nbsp;
             &nbsp;
@@ -114,7 +126,7 @@ export default class Addasset extends Component {
             &nbsp;
             <label>
                 Share Quantity:
-              <input type="text" name="0" defaultValue={this.shares} onChange={this.handleChange} />
+              <input type="text" name="shares" value={this.state.shares} onChange={this.handleChange} />
               </label>
               <input type="submit" value="Submit" />
             </form>
@@ -125,19 +137,15 @@ export default class Addasset extends Component {
           &nbsp;
           &nbsp;
           <Popup trigger={<button > Remove Asset </button>} position="right center">
-            <div><form>
+            <div><form onSubmit={this.removeStock}>
               <label>
                 Asset Symbol:
-            <input type="text" name="symbol" defaultValue={this.symbol} onChange={this.handleChange} />
+                <input type="text" name="symbol" value={this.state.symbol} onChange={this.handleChange} />
               </label>
           &nbsp;
           &nbsp;
           &nbsp;
           &nbsp;
-          <label>
-                Share Quantity:
-            <input type="text" name="0" defaultValue={this.shares} onChange={this.handleChange} />
-              </label>
               <input type="submit" value="Submit" />
             </form>
             </div>
