@@ -14,25 +14,28 @@ const useStyles = theme => ({
 
 class HomeButtons extends Component {
 	generateTotalValue() {
-		return this.props.portfolioValue;
+		return this.props.portfolioValue.toFixed(2);
 	}
 	generateStockValue() {
-		var stock = null;
+		var stock = 0.0;
 		if(this.props.stock != null){
-			this.props.stock.map((obj) => {
-				stock += obj.buyPrice * obj.shares;
+			const stocks = this.props.stock;
+			stocks.map((obj) => {
+				stock += obj.price * obj.shares;
 			})
 		}
-		return stock;
+		return stock.toFixed(2);
 	}
 	generateCryptoValue() {
-		var crypto = null;
+		var crypto = 0.0;
+		console.log(this.props.crypto)
 		if(this.props.crypto != null){
-			this.props.crypto.map((obj) => {
-				crypto += obj.buyPrice * obj.amount;
+			const cryptos = this.props.crypto
+			cryptos.map((obj) => {
+				crypto += obj.price * obj.amount;
 			})
 		}
-		return crypto;
+		return crypto.toFixed(2);
 	}
 	render(){
 		const { classes } = this.props;
@@ -41,12 +44,12 @@ class HomeButtons extends Component {
 				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
 					Crypto
 					<br />
-					{ "$" + this.generateStockValue() }
+					{ "$" + this.generateCryptoValue() }
 				</Button>
 				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
 					Stock
 					<br />
-					{ "$" + this.generateCryptoValue() }
+					{ "$" + this.generateStockValue() }
 				</Button>
 				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
 					Total Assets

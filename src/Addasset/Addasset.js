@@ -54,12 +54,15 @@ export default class Addasset extends Component {
       axios.get(cryptoURL, config)
     ])
       .then(responseArr => {
+        const stockData = responseArr[0].data;
+        const cryptoData = responseArr[1].data;
+
         this.setState({
           token: token,
           initializing: false,
-          portfolioValue: 0, /* generate portfolio value dynamically*/
-          stock: responseArr[0].data,
-          crypto: responseArr[1].data
+          portfolioValue: stockData['total-value'] + cryptoData['total-value'],
+          stock: stockData['stocks'],
+          crypto: cryptoData['crypto']
         });
 
       });

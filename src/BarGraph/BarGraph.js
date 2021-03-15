@@ -20,14 +20,17 @@ export default class BarGraph extends Component {
 
 	generateDataPoints() {
 		var dps = [];
-		if(this.props.stock != null){
-			this.props.stock.map((obj) => {
-				dps.push({y:obj.buyPrice*obj.shares, label:obj.symbol})
+		const stock = this.props.stock;
+		const crypto = this.props.crypto;
+
+		if(stock != null && stock != {}){
+			stock.map((obj) => {
+				dps.push({y:obj.price*obj.shares, label:obj.symbol})
 			})
 		}
-		if(this.props.crypto != null){
-			this.props.crypto.map((obj) => {
-				dps.push({y:obj.buyPrice*obj.amount, label:obj.name})
+		if(crypto != null && crypto != {}){
+			crypto.map((obj) => {
+				dps.push({y:obj.price*obj.amount, label:obj.symbol})
 			})
 		}
 		return dps;

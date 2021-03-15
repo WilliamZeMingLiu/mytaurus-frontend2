@@ -42,13 +42,16 @@ export default class Dashboard extends Component {
 			axios.get(cryptoURL, config)
 		])
 			.then(responseArr => {
-				this.setState({
-					initializing: false,
-					portfolioValue: 0, /* generate portfolio value dynamically*/
-					stock: responseArr[0].data,
-					crypto: responseArr[1].data
-				});
+				const stockData = responseArr[0].data;
+				const cryptoData = responseArr[1].data;
 
+				this.setState({
+					token: token,
+					initializing: false,
+					portfolioValue: stockData['total-value'] + cryptoData['total-value'],
+					stock: stockData['stocks'],
+					crypto: cryptoData['crypto']
+				});
 			});
 	}
 
@@ -59,7 +62,7 @@ export default class Dashboard extends Component {
 		return (
 			<div className="dashboard-wrapper">
 				<HomeButtons stock={this.state.stock} crypto={this.state.crypto} portfolioValue={this.state.portfolioValue} />
-				
+
 				<div className="split-wrapper">
 					<AssetTableTab stock={this.state.stock} crypto={this.state.crypto} />
 					<GraphTab stock={this.state.stock} crypto={this.state.crypto} portfolioValue={this.state.portfolioValue} />

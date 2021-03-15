@@ -22,10 +22,10 @@ export default class PieGraph extends Component {
 	generateDataPoints() {
 		var dps = [];
 		if(this.props.portfolioValue != null){
-			var portfolioValue = this.props.portfolioValue[this.props.portfolioValue.length-1].value
+			let portfolioValue = this.props.portfolioValue;
 			if(this.props.stock != null){
 				this.props.stock.map((obj) => {
-					var y_value = obj.buyPrice*obj.shares;
+					var y_value = obj.price*obj.shares;
 					y_value /= portfolioValue
 					y_value = y_value*100;
 					console.log(y_value);
@@ -34,11 +34,11 @@ export default class PieGraph extends Component {
 			}
 			if(this.props.crypto != null){
 				this.props.crypto.map((obj) => {
-					var y_value = obj.buyPrice*obj.amount;
+					var y_value = obj.price*obj.amount;
 					y_value /= portfolioValue
 					y_value = y_value*100;
 					console.log(y_value);
-					dps.push({y:y_value, name:obj.name})
+					dps.push({y:y_value, name:obj.symbol})
 				})
 			}
 		}
