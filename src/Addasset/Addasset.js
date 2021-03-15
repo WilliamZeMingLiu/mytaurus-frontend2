@@ -1,17 +1,18 @@
 import './Addasset.css';
 import React, { Component } from "react";
-import HomeButtons from '../HomeButtons/HomeButtons';
 import AssetTableTab from '../AssetTableTab/AssetTableTab';
-import LineGraph from '../LineGraph/LineGraph';
-import GraphTab from '../GraphTab/GraphTab';
 import { Button } from '@material-ui/core';
-import { useState, useRef, setState } from 'react-hook-use-state';
-import Modal from 'react-modal';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { AuthContext } from '../Auth';
 import axios from 'axios';
-import NavBar from '../NavBar/NavBar';
 
 
 export default class Addasset extends Component {
@@ -26,7 +27,9 @@ export default class Addasset extends Component {
       stock: null,
       crypto: null,
       symbol: null,
-      shares: null
+      shares: null,
+      open1: false,
+      open2: false,
     };
 
     this.addStock = this.addStock.bind(this);
@@ -114,6 +117,22 @@ export default class Addasset extends Component {
 
 
   render() {
+    const handleClickOpen1 = () => {
+      this.setState({open1: true});
+    }
+
+    const handleClose1 = () => {
+      this.setState({open1: false});
+    }
+
+    const handleClickOpen2 = () => {
+      this.setState({open2: true});
+    }
+
+    const handleClose2 = () => {
+      this.setState({open2: false});
+    }
+
     if (this.state.initializing) {
       return <div />
     }
@@ -121,37 +140,91 @@ export default class Addasset extends Component {
       <div className="Addasset-wrapper">
         <AssetTableTab stock={this.state.stock} crypto={this.state.crypto} />
         <div className="addbutton-wrapper">
-          <Popup trigger={<button > Add Asset </button>} position="right center">
-            <div><form onSubmit={this.addStock}>
-              <label>
-                Asset Symbol:
-              <input type="text" name="symbol" value={this.state.symbol} onChange={this.handleChange} />
-              </label>
 
-            <label>
-                Share Quantity:
-              <input type="text" name="shares" value={this.state.shares} onChange={this.handleChange} />
-              </label>
-              <input type="submit" value="Submit" />
-            </form>
-            </div>
-          </Popup>
-     
-          <Popup trigger={<button > Remove Asset </button>} position="right center">
-            <div><form onSubmit={this.removeStock}>
-              <label>
-                Asset Symbol:
-                <input type="text" name="symbol" value={this.state.symbol} onChange={this.handleChange} />
-              </label>
-       
-              <input type="submit" value="Submit" />
-            </form>
-            </div>
-          </Popup>
+
+        <div className="button-group">
+          <Button variant="contained" color="primary" onClick={handleClickOpen1}>
+            Add Asset
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleClickOpen2}>
+            Remove Asset
+          </Button>
         </div>
-  
-      </div>
 
-    );
-  }
-}
+          <Dialog open={this.state.open1} onClose={handleClose1} aria-labelledby="form-dialog-title">
+            <form onSubmit={this.addStock}>
+              <DialogTitle id="form-dialog-title">Add Asset</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Please enter the desired asset symbol and number of shares.
+                </DialogContentText>
+                <div className="textfield-wrapper">
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    variant="outlined"
+                    name="symbol"
+                    value={this.state.symbol}
+                    label="Symbol"
+                    onChange={this.handleChange}
+                  />
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    variant="outlined"
+                    name="shares"
+                    value={this.state.shares}
+                    label="Shares"
+                    type="number"
+                    onChange={this.handleChange}
+                  />
+                </div>
+                
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose1} color="primary">
+                  Cancel
+                </Button>
+                <Button type="submit" onClick={handleClose1} color="primary">
+                  Add
+                </Button>
+              </DialogActions>
+            </form>
+          </Dialog>
+
+          <Dialog open={this.state.open2} onClose={handleClose2} aria-labelledby="form-dialog-title">
+            <form onSubmit={this.removeStock}>
+              <DialogTitle id="form-dialog-title">Remove Asset</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Please enter the desired asset symbol to remove.
+                </DialogContentText>
+                <div className="textfield-wrapper">
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    variant="outlined"
+                    name="symbol"
+                    value={this.state.symbol}
+                    label="Symbol"
+                    onChange={this.handleChange}
+                    type="text"
+                  />
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose2} color="primary">
+                  Cancel
+                </Button>
+                <Button type="submit" onClick={handleClose2} color="primary">
+                  Remove
+                </Button>
+              </DialogActions>
+            </form>
+          </Dialog>
+
+      </div>
+    </div>
+
+  );
+}}

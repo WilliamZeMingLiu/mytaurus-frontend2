@@ -1,21 +1,22 @@
 .Addasset-wrapper {
-	width: 100%;
-	margin: 0 auto;
-  vertical-align: middle;
-  justify-content: space-between;
-  margin-left: 27%;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 30px;
 }
 
-.addbutton-wrapper
-{
-  margin-left: 15%;
-  padding-top: 30px;
-
+.addbutton-wrapper {
+  text-align: center;
 }
 
-.split-wrapper {
-	display: flex;
-	justify-content: space-between;
-	margin-bottom: 50px;
+.button-group {
+  width: 20%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 30px;
+}
 
+.textfield-wrapper {
+  display: flex;
+  justify-content: space-around;
 }

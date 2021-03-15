@@ -12,6 +12,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../Auth';
 import Dashboard from '../Dashboard/Dashboard';
 
+
 export default class Home extends Component {
 	static contextType = AuthContext;
 
@@ -26,13 +27,12 @@ export default class Home extends Component {
 	}
 
 	componentDidMount() {
-		const {currentUser} = this.context;
-		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));		
+		const { currentUser } = this.context;
+		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
 	}
 
 	loadData(token) {
 		console.log(token)
-		const valueURL = "https://my-taurus.herokuapp.com/values";
 		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
 
@@ -43,20 +43,21 @@ export default class Home extends Component {
 		}
 
 		axios.all([
-			axios.get(valueURL, config),
 			axios.get(stockURL, config),
 			axios.get(cryptoURL, config)
 		])
-		.then(responseArr => {
-			console.log(responseArr[1].data);
-			this.setState({
-				initializing: false,
-				portfolioValue: responseArr[0].data,
-				stock: responseArr[1].data,
-				crypto: responseArr[2].data
-			});
+			.then(responseArr => {
+				const stockData = responseArr[0].data;
+				const cryptoData = responseArr[1].data;
 
-		});
+				this.setState({
+					token: token,
+					initializing: false,
+					portfolioValue: stockData['total-value'] + cryptoData['total-value'],
+					stock: stockData['stocks'],
+					crypto: cryptoData['crypto']
+				});
+			});
 	}
 
 	render() {
@@ -66,7 +67,7 @@ export default class Home extends Component {
 
   	return (
 	    <div className="Home">
-	      <NavBar component={Dashboard}/>
+	      <NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} />
 	      <Footer />
 	    </div>
 	  );

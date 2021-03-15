@@ -62,10 +62,3 @@ class HomeButtons extends Component {
 }
 
 export default withStyles(useStyles)(HomeButtons);
-
-
-
-
-
-
-

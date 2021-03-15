@@ -3,18 +3,68 @@ import React, { Component } from "react";
 import axios from 'axios';
 import Footer from '../Footer/Footer.js';
 import NavBar from '../NavBar/NavBar';
-//import HomeTable from '../HomeTable/HomeTable';
 import Addasset from '../Addasset/Addasset';
+import 'reactjs-popup/dist/index.css';
+import { AuthContext } from '../Auth';
 
 export default class AddAssetPage extends Component {
+	static contextType = AuthContext;
+
 	constructor(props) {
-		super(props);
+	  super(props);
+	  this.state = {
+		token: null,
+		initializing: true,
+		portfolioValue: null,
+		stock: null,
+		crypto: null,
+		symbol: null,
+		shares: null
+	  };
+	}
+  
+	componentDidMount() {
+	  const { currentUser } = this.context;
+	  currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
+	}
+  
+	loadData(token) {
+	  console.log(token)
+	  const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
+	  const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
+  
+	  let config = {
+		headers: {
+		  Authorization: `Bearer ${token}`
+		}
+	  }
+  
+	  axios.all([
+		axios.get(stockURL, config),
+		axios.get(cryptoURL, config)
+	  ])
+		.then(responseArr => {
+		  const stockData = responseArr[0].data;
+		  const cryptoData = responseArr[1].data;
+  
+		  this.setState({
+			token: token,
+			initializing: false,
+			portfolioValue: stockData['total-value'] + cryptoData['total-value'],
+			stock: stockData['stocks'],
+			crypto: cryptoData['crypto']
+		  });
+  
+		});
 	}
 
 	render() {
+		if (this.state.initializing) {
+			return <div />
+		}
 	  	return (
-		    <div className="Home">
-		      <NavBar component={Addasset}/>
+		    <div className="AddAssetPage">
+		      <NavBar component={Addasset} portfolioValue={this.state.portfolioValue} />
 		      <Footer />
 		    </div>
 		  );

@@ -11,6 +11,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -35,6 +36,8 @@ import Dashboard from '../Dashboard/Dashboard';
 
 import { auth } from '../firebase.js';
 import { Redirect, useHistory } from 'react-router-dom';
+
+
 
 const drawerWidth = 190;
 
@@ -61,10 +64,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar({ component: RouteComponent}) {
+export default function NavBar({ component: RouteComponent, portfolioValue, stock, crypto}) {
   const classes = useStyles();
   const [drop, setDrop] = React.useState(false);
-
 
   //Routing
   const history = useHistory();
@@ -84,7 +86,9 @@ export default function NavBar({ component: RouteComponent}) {
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h5" noWrap style={{ flexGrow: 1 }}>
-            MyTaurus
+            <Link href="/" color="inherit">
+              MyTaurus
+            </Link>
           </Typography>
           <IconButton onClick={() => renderSignOut()}
            color="inherit" aria-label="account">
@@ -107,12 +111,13 @@ export default function NavBar({ component: RouteComponent}) {
             </ListItem>
             <ListItem>
               <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
-              <ListItemText primary="$110,392.23"/>
+              <ListItemText primary={portfolioValue.toFixed(2)}/>
             </ListItem>
           </List>
           <Divider />
 
           <List>
+            {/* 
             <ListItem button>
               <ListItemIcon><AccountBalanceIcon/></ListItemIcon>
               <ListItemText primary="Balance" />
@@ -121,10 +126,12 @@ export default function NavBar({ component: RouteComponent}) {
               <ListItemIcon><HistoryIcon/></ListItemIcon>
               <ListItemText primary="Asset History" />
             </ListItem>
-            <ListItem button component="a" href="http://localhost:3000/addasset">
+            */}
+            <ListItem button component="a" href="/addasset">
               <ListItemIcon><AccountBalanceWalletIcon/></ListItemIcon>
               <ListItemText primary="Manage Assets" />
             </ListItem>
+            {/*
             <ListItem button onClick={handleDrop}>
               <ListItemIcon>
                 <BarChartIcon />
@@ -148,9 +155,10 @@ export default function NavBar({ component: RouteComponent}) {
                 </ListItem>
               </List>
             </Collapse>
+            */}
           </List>
+          {/*
           <Divider />
-
           <List>
             <ListItem button>
               <ListItemIcon><SettingsIcon/></ListItemIcon>
@@ -165,195 +173,13 @@ export default function NavBar({ component: RouteComponent}) {
               <ListItemText primary="Help" />
             </ListItem>
           </List>
+          */}
         </div>
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <RouteComponent />
+        <RouteComponent portfolioValue={portfolioValue} stock={stock} crypto={crypto} />
       </main>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-export default function NavBar() {
-  //Routing
-  const history = useHistory();
-
-  async function renderSignOut() {
-    await auth.signOut();
-    history.push("/login");
-  }
-
-
-  //Material-UI functions
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
-  const [drop, setDrop] = React.useState(false);
-
-  const handleDrop = () => {
-    setDrop(!drop);
-  };
-
-  /*const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar,
-          {[classes.appBarShift]: open,}
-        )}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            //onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          <Typography variant="h5" noWrap style={{ flexGrow: 1 }}>
-            MyTaurus
-          </Typography>
-
-
-          <IconButton onClick={() => renderSignOut()}
-           color="inherit" aria-label="account">
-            <AccountCircleIcon fontSize="large"/>
-          </IconButton>
-
-        </Toolbar>
-      </AppBar>
-
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <IconButton onClick={handleDrawerClose}>
-          {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
-
-        <h1>
-          MyTaurus
-        </h1>
-
-        <Divider />
-
-        <List>
-          <ListItem>
-            <ListItemText primary="Your Portfolio"/>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
-            <ListItemText primary="$110,392.23"/>
-          </ListItem>
-        </List>
-        <Divider />
-
-        <List>
-          <ListItem button>
-            <ListItemIcon><AccountBalanceIcon/></ListItemIcon>
-            <ListItemText primary="Balance" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon><HistoryIcon/></ListItemIcon>
-            <ListItemText primary="Asset History" />
-          </ListItem>
-          <ListItem button onClick={handleDrop}>
-            <ListItemIcon>
-              <BarChartIcon />
-            </ListItemIcon>
-            <ListItemText primary="Analytics" />
-            {drop ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={drop} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
-                <ListItemText primary="Finance" />
-              </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon><DirectionsCarIcon /></ListItemIcon>
-                <ListItemText primary="Vehicles" />
-              </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon><DoubleArrowIcon /></ListItemIcon>
-                <ListItemText primary="Trigger" />
-              </ListItem>
-            </List>
-          </Collapse>
-        </List>
-        <Divider />
-
-        <List>
-          <ListItem button>
-            <ListItemIcon><SettingsIcon/></ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon><InfoIcon/></ListItemIcon>
-            <ListItemText primary="About" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon><HelpOutlineIcon/></ListItemIcon>
-            <ListItemText primary="Help" />
-          </ListItem>
-        </List>
-      </Drawer>
-
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        <Dashboard />
-      </main>
-
-    </div>
-  );
-}
-*/
