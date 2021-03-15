@@ -11,6 +11,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { AuthContext } from '../Auth';
 import axios from 'axios';
+import NavBar from '../NavBar/NavBar';
 
 
 export default class Addasset extends Component {
@@ -106,6 +107,9 @@ export default class Addasset extends Component {
     this.loadData(this.state.token);
   }
 
+
+
+
   render() {
     if (this.state.initializing) {
       return <div />
@@ -120,10 +124,7 @@ export default class Addasset extends Component {
                 Asset Symbol:
               <input type="text" name="symbol" value={this.state.symbol} onChange={this.handleChange} />
               </label>
-            &nbsp;
-            &nbsp;
-            &nbsp;
-            &nbsp;
+
             <label>
                 Share Quantity:
               <input type="text" name="shares" value={this.state.shares} onChange={this.handleChange} />
@@ -132,30 +133,20 @@ export default class Addasset extends Component {
             </form>
             </div>
           </Popup>
-          &nbsp;
-          &nbsp;
-          &nbsp;
-          &nbsp;
+     
           <Popup trigger={<button > Remove Asset </button>} position="right center">
             <div><form onSubmit={this.removeStock}>
               <label>
                 Asset Symbol:
                 <input type="text" name="symbol" value={this.state.symbol} onChange={this.handleChange} />
               </label>
-          &nbsp;
-          &nbsp;
-          &nbsp;
-          &nbsp;
+       
               <input type="submit" value="Submit" />
             </form>
             </div>
           </Popup>
         </div>
-        &nbsp;
-        &nbsp;
-        &nbsp;
-        &nbsp;
-
+  
       </div>
 
     );

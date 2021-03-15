@@ -11,7 +11,6 @@ import { auth } from '../firebase';
 import { useContext } from 'react';
 import { AuthContext } from '../Auth';
 import Dashboard from '../Dashboard/Dashboard';
-import Addasset from '../Addasset/Addasset';
 
 export default class Home extends Component {
 	static contextType = AuthContext;
@@ -49,6 +48,7 @@ export default class Home extends Component {
 			axios.get(cryptoURL, config)
 		])
 		.then(responseArr => {
+			console.log(responseArr[1].data);
 			this.setState({
 				initializing: false,
 				portfolioValue: responseArr[0].data,
@@ -67,7 +67,6 @@ export default class Home extends Component {
   	return (
 	    <div className="Home">
 	      <NavBar component={Dashboard}/>
-        <NavBar component={Addasset}/>
 	      <Footer />
 	    </div>
 	  );

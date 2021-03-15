@@ -37,7 +37,7 @@ class AssetTable extends Component {
 
   generatColumns() {
     var arr = [];
-    if(this.props.data != null){
+    if(this.props.data[0] != null){
       var counter = 1;
       Object.keys(this.props.data[0]).map((column) => {
         arr.push({
