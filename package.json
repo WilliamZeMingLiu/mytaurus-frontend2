@@ -1,9 +1,6 @@
 {
   "name": "mytaurus",
   "version": "0.1.0",
-  "engines": {
-    "node": "12.13.0"
-  },
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -32,8 +29,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
