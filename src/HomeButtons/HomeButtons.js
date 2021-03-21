@@ -28,7 +28,7 @@ class HomeButtons extends Component {
 	}
 	generateCryptoValue() {
 		var crypto = 0.0;
-		console.log(this.props.crypto)
+		// console.log(this.props.crypto)
 		if(this.props.crypto != null){
 			const cryptos = this.props.crypto
 			cryptos.map((obj) => {
