@@ -31,12 +31,16 @@ export default class Addasset extends Component {
       crypto: null,
       symbol: null,
       shares: null,
+      cryptoSymbol: null,
+      amount: null,
       open1: false,
       open2: false,
     };
 
     this.addStock = this.addStock.bind(this);
     this.removeStock = this.removeStock.bind(this);
+    this.addCrypto = this.addCrypto.bind(this);
+    this.removeCrypto = this.removeCrypto(this);
     this.generateStockValue = this.generateStockValue.bind(this);
     this.generateCryptoValue = this.generateCryptoValue.bind(this);
     this.generateStockPoints = this.generateStockPoints.bind(this);
@@ -123,7 +127,6 @@ export default class Addasset extends Component {
 
   async addStock(e) {
     e.preventDefault();
-    console.log("add stock called");
     const url = 'https://my-taurus.herokuapp.com/stocks/add'
 
     const params = new URLSearchParams();
@@ -139,6 +142,44 @@ export default class Addasset extends Component {
 
     await axios.post(url, params, config);
     this.loadData(this.state.token);
+  }
+
+  async addCrypto(e) {
+    e.preventDefault();
+    const url = 'https://my-taurus.herokuapp.com/crypto/add'
+
+    const params = new URLSearchParams();
+    params.append('symbol', this.state.cryptoSymbol);
+    params.append('amount', this.state.amount);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${this.state.token}`
+      }
+    }
+
+    await axios.post(url, params, config);
+    this.loadData(this.state.token);
+  }
+
+  async removeCrypto(e) {
+    e.preventDefault();
+    const url = 'https://my-taurus.herokuapp.com/crypto/remove'
+
+    const params = new URLSearchParams();
+    params.append('symbol', this.state.cryptoSymbol);
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${this.state.token}`
+      }
+    }
+
+    await axios.post(url, params, config);
+    this.loadData(this.state.token);
+
   }
 
   async removeStock(e) {
