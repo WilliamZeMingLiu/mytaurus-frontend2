@@ -7,11 +7,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
 import PieGraph from '../PieGraph/PieGraph';
 import BarGraph from '../BarGraph/BarGraph';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import BarChartIcon from '@material-ui/icons/BarChart';
+import { Card, CardContent } from '@material-ui/core';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,18 +69,22 @@ class GraphTab extends Component {
 
     return(
       <div className="graph-wrapper">
-        <AppBar position="static" color="primary">
-          <Tabs variant="fullWidth" centered value={this.state.value} onChange={handleChange} aria-label="table tabs">
-            <Tab icon={<BarChartIcon fontSize='large' />} {...a11yProps(0)} />
-            <Tab icon={<PieChartIcon fontSize='large' />} {...a11yProps(1)} />
-          </Tabs>
-        </AppBar>
-        <TabPanel value={this.state.value} index={0}>
-            <BarGraph stock={this.props.stock} crypto={this.props.crypto} />
-        </TabPanel>
-        <TabPanel value={this.state.value} index={1}>
-            <PieGraph stock={this.props.stock} crypto={this.props.crypto} portfolioValue={this.props.portfolioValue} />
-        </TabPanel>
+        <Card>
+          <CardContent>
+            <AppBar position="static" color="primary">
+              <Tabs variant="fullWidth" centered value={this.state.value} onChange={handleChange} aria-label="table tabs">
+                <Tab icon={<BarChartIcon fontSize='large' />} {...a11yProps(0)} />
+                <Tab icon={<PieChartIcon fontSize='large' />} {...a11yProps(1)} />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={this.state.value} index={0}>
+                <BarGraph stock={this.props.stock} crypto={this.props.crypto} />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={1}>
+                <PieGraph stock={this.props.stock} crypto={this.props.crypto} portfolioValue={this.props.portfolioValue} />
+            </TabPanel>
+          </CardContent>
+        </Card>
       </div>
     );
   }

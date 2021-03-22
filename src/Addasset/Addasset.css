@@ -1,19 +1,11 @@
 .Addasset-wrapper {
   width: 90%;
   margin: 0 auto;
-  margin-top: 30px;
 }
 
-.addbutton-wrapper {
-  text-align: center;
-}
-
-.button-group {
-  width: 20%;
-  margin: 0 auto;
+.table-wrapper {
   display: flex;
-  justify-content: space-evenly;
-  margin-top: 30px;
+  justify-content: space-between;
 }
 
 .textfield-wrapper {

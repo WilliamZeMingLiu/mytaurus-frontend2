@@ -1,20 +1,28 @@
 import './HomeButtons.css';
 import React, { Component } from "react";
-import { Button } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import helper from '../helper.js';
 
 const useStyles = theme => ({
-  margin: {
-    margin: theme.spacing(1),
-    marginRight: theme.spacing(3),
-    marginLeft: theme.spacing(3),
-  },
+    root: {
+		textAlign: 'center',
+		width: '30%',
+	  },
+	  title: {
+		fontSize: 16,
+		fontWeight: 'bold',
+	  },
+	  value: {
+		marginBottom: 12,
+		fontSize: 22,
+	  },
 });
 
 
 class HomeButtons extends Component {
 	generateTotalValue() {
-		return this.props.portfolioValue.toFixed(2);
+		return helper.prettifyPrice(this.props.portfolioValue);
 	}
 	generateStockValue() {
 		var stock = 0.0;
@@ -24,7 +32,7 @@ class HomeButtons extends Component {
 				stock += obj.price * obj.shares;
 			})
 		}
-		return stock.toFixed(2);
+		return helper.prettifyPrice(stock);
 	}
 	generateCryptoValue() {
 		var crypto = 0.0;
@@ -35,27 +43,42 @@ class HomeButtons extends Component {
 				crypto += obj.price * obj.amount;
 			})
 		}
-		return crypto.toFixed(2);
+		return helper.prettifyPrice(crypto);
 	}
 	render(){
 		const { classes } = this.props;
 		return (
 			<div className="button-wrapper-1">
-				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
-					Crypto
-					<br />
-					{ "$" + this.generateCryptoValue() }
-				</Button>
-				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
-					Stock
-					<br />
-					{ "$" + this.generateStockValue() }
-				</Button>
-				<Button variant="contained" size="large" color="primary" fullWidth={true} style={{ fontSize: '20px'}} className={classes.margin}>
-					Total Assets
-					<br />
-					{ "$" + this.generateTotalValue() }
-				</Button>
+				<Card className={classes.root}>
+					<CardContent>
+						<Typography className={classes.title} color="textSecondary" gutterBottom>
+							{ helper.capitalizeAll('crypto') }
+						</Typography>
+						<Typography className={classes.value} color="textPrimary">
+							{ this.generateCryptoValue() }
+						</Typography>
+					</CardContent>
+				</Card>
+				<Card className={classes.root}>
+					<CardContent>
+						<Typography className={classes.title} color="textSecondary" gutterBottom>
+							{ helper.capitalizeAll('stocks') }
+						</Typography>
+						<Typography className={classes.value} color="textPrimary">
+							{ this.generateStockValue() }
+						</Typography>
+					</CardContent>
+				</Card>
+				<Card className={classes.root}>
+					<CardContent>
+						<Typography className={classes.title} color="textSecondary" gutterBottom>
+							{ helper.capitalizeAll('total assets') }
+						</Typography>
+						<Typography className={classes.value} color="textPrimary">
+							{ this.generateTotalValue() }
+						</Typography>
+					</CardContent>
+				</Card>
 			</div>	
 		);
 	}

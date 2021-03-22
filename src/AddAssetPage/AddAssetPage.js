@@ -1,11 +1,11 @@
 import './AddAssetPage.css';
 import React, { Component } from "react";
 import axios from 'axios';
-import Footer from '../Footer/Footer.js';
 import NavBar from '../NavBar/NavBar';
 import Addasset from '../Addasset/Addasset';
 import 'reactjs-popup/dist/index.css';
 import { AuthContext } from '../Auth';
+import LoadScreen from '../LoadScreen/LoadScreen';
 
 export default class AddAssetPage extends Component {
 	static contextType = AuthContext;
@@ -60,12 +60,11 @@ export default class AddAssetPage extends Component {
 
 	render() {
 		if (this.state.initializing) {
-			return <div />
+			return <LoadScreen />
 		}
 	  	return (
 		    <div className="AddAssetPage">
 		      <NavBar component={Addasset} portfolioValue={this.state.portfolioValue} />
-		      <Footer />
 		    </div>
 		  );
   }

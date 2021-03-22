@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import CanvasJSReact from '../assets/canvasjs.react';
 import './PieGraph.css';
+import helper from '../helper.js';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -28,8 +29,7 @@ export default class PieGraph extends Component {
 					var y_value = obj.price*obj.shares;
 					y_value /= portfolioValue
 					y_value = y_value*100;
-					console.log(y_value);
-					dps.push({y:y_value, name:obj.symbol})
+					dps.push({y:y_value, name: helper.capitalizeAll(obj.symbol)})
 				})
 			}
 			if(this.props.crypto != null){
@@ -37,8 +37,7 @@ export default class PieGraph extends Component {
 					var y_value = obj.price*obj.amount;
 					y_value /= portfolioValue
 					y_value = y_value*100;
-					console.log(y_value);
-					dps.push({y:y_value, name:obj.symbol})
+					dps.push({y:y_value, name: helper.capitalizeAll(obj.symbol)})
 				})
 			}
 		}
@@ -60,7 +59,6 @@ export default class PieGraph extends Component {
 				type: "doughnut",
 				showInLegend: true,
 				yValueFormatString: "#,###'%'",
-				//5, 31, 40, 17, 7
 				dataPoints: this.generateDataPoints()
 			}]
 		}

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import CanvasJSReact from '../assets/canvasjs.react';
+import helper from '../helper.js';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
@@ -25,12 +26,12 @@ export default class BarGraph extends Component {
 
 		if(stock != null && stock != {}){
 			stock.map((obj) => {
-				dps.push({y:obj.price*obj.shares, label:obj.symbol})
+				dps.push({y: obj.price*obj.shares, label: helper.capitalizeAll(obj.symbol)})
 			})
 		}
 		if(crypto != null && crypto != {}){
 			crypto.map((obj) => {
-				dps.push({y:obj.price*obj.amount, label:obj.symbol})
+				dps.push({y: obj.price*obj.amount, label: helper.capitalizeAll(obj.symbol)})
 			})
 		}
 		return dps;
@@ -66,6 +67,6 @@ export default class BarGraph extends Component {
 		if(order > suffixes.length - 1)
 			order = suffixes.length - 1;
 		var suffix = suffixes[order];
-		return "$" + CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
+		return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
 	}
 }

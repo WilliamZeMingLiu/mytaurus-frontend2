@@ -1,17 +1,17 @@
 .dashboard-wrapper {
 	width: 90%;
-	margin-top: 30px;
 }
 
-.table-graph-wrapper {
+.graph-wrapper {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 50px;
 }
 
-.table {
+.pie {
 	width: 48%;
 }
 
-.graph {
+.bar {
 	width: 48%;
 }

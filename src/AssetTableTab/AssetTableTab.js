@@ -7,8 +7,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
 import AssetTable from '../AssetTable/AssetTable';
+import { Card, CardContent } from '@material-ui/core';
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,19 +66,23 @@ class AssetTableTab extends Component {
       };
 
       return(
-        <div className="table-wrapper">
-          <AppBar position="static" color="primary">
-            <Tabs variant="fullWidth" centered value={this.state.value} onChange={handleChange} aria-label="table tabs">
-              <Tab label="Stocks" {...a11yProps(0)} />
-              <Tab label="Crypto" {...a11yProps(1)} />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={this.state.value} index={0}>
-              <AssetTable data={this.props.stock} />
-          </TabPanel>
-          <TabPanel value={this.state.value} index={1}>
-              <AssetTable data={this.props.crypto} />
-          </TabPanel>
+        <div className="table-tab-wrapper">
+          <Card>
+            <AppBar position="static" color="primary">
+              <Tabs variant="fullWidth" centered value={this.state.value} onChange={handleChange} aria-label="table tabs">
+                <Tab label="Stocks" {...a11yProps(0)} />
+                <Tab label="Crypto" {...a11yProps(1)} />
+              </Tabs>
+            </AppBar>
+            <CardContent>
+              <TabPanel value={this.state.value} index={0}>
+                  <AssetTable data={this.props.stock} />
+              </TabPanel>
+              <TabPanel value={this.state.value} index={1}>
+                  <AssetTable data={this.props.crypto} />
+              </TabPanel>
+            </CardContent>
+          </Card>
         </div>
       ); 
     } 

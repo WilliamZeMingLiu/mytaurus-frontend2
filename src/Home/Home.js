@@ -1,7 +1,6 @@
 import './Home.css';
 import React, { Component, useState, useEffect } from "react";
 import axios from 'axios';
-import Footer from '../Footer/Footer.js';
 import NavBar from '../NavBar/NavBar';
 //import HomeTable from '../HomeTable/HomeTable';
 import HomeButtons from '../HomeButtons/HomeButtons';
@@ -11,6 +10,7 @@ import { auth } from '../firebase';
 import { useContext } from 'react';
 import { AuthContext } from '../Auth';
 import Dashboard from '../Dashboard/Dashboard';
+import LoadScreen from '../LoadScreen/LoadScreen';
 
 
 
@@ -70,39 +70,16 @@ export default class Home extends Component {
 
 	}
 
-	// updateCryptoPrice(){
-	// 	const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
-
-	// 	let config = {
-	// 		headers: {
-	// 			Authorization: `Bearer ${this.state.token}`
-	// 		}
-	// 	}
-
-	// 	axios.all([
-	// 		axios.get(cryptoURL, config)
-	// 	])
-	// 		.then(responseArr => {
-	// 			const cryptoData = responseArr[0].data;
-
-	// 			this.setState({
-	// 				initializing: false,
-	// 				// portfolioValue: stockData['total-value'] + cryptoData['total-value'],
-	// 				crypto: cryptoData['crypto']
-	// 			});
-	// 		});
-
-	// 	}
-
 	render() {
 		if (this.state.initializing) {
-			return <div />
+			return (
+				<LoadScreen />
+			)
 		}
-  	return (
-	    <div className="Home">
-	      <NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} />
-	      <Footer />
-	    </div>
-	  );
+		return (
+			<div className="Home">
+				<NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} />
+			</div>
+		);
   }
 }

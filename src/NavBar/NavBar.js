@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
 import Drawer from '@material-ui/core/Drawer';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -31,6 +31,7 @@ import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import helper from '../helper.js';
 
 import Dashboard from '../Dashboard/Dashboard';
 
@@ -90,10 +91,13 @@ export default function NavBar({ component: RouteComponent, portfolioValue, stoc
               MyTaurus
             </Link>
           </Typography>
-          <IconButton onClick={() => renderSignOut()}
-           color="inherit" aria-label="account">
-            <AccountCircleIcon fontSize="large"/>
-          </IconButton>
+          <Tooltip title="Logout">
+            <IconButton onClick={() => renderSignOut()}
+            color="inherit" aria-label="account">
+              <AccountCircleIcon fontSize="large"/>
+            </IconButton>
+          </Tooltip>
+          
         </Toolbar>
       </AppBar>
       <Drawer
@@ -111,7 +115,7 @@ export default function NavBar({ component: RouteComponent, portfolioValue, stoc
             </ListItem>
             <ListItem>
               <ListItemIcon><AttachMoneyIcon/></ListItemIcon>
-              <ListItemText primary={portfolioValue.toFixed(2)}/>
+              <ListItemText primary={helper.prettifyPrice(portfolioValue)}/>
             </ListItem>
           </List>
           <Divider />
