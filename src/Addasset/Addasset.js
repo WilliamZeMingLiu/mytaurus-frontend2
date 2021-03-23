@@ -40,7 +40,7 @@ export default class Addasset extends Component {
     this.addStock = this.addStock.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.addCrypto = this.addCrypto.bind(this);
-    this.removeCrypto = this.removeCrypto(this);
+    this.removeCrypto = this.removeCrypto.bind(this);
     this.generateStockValue = this.generateStockValue.bind(this);
     this.generateCryptoValue = this.generateCryptoValue.bind(this);
     this.generateStockPoints = this.generateStockPoints.bind(this);

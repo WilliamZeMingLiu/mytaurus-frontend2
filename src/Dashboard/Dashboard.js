@@ -19,9 +19,10 @@ export default class Dashboard extends Component {
 	}
 
 	render() {
+	
 		return (
 			<div className="dashboard-wrapper">
-				<HomeButtons stock={this.state.stock} crypto={this.state.crypto} portfolioValue={this.state.portfolioValue}/>
+				<HomeButtons stock={this.props.stock} crypto={this.props.crypto} portfolioValue={this.props.portfolioValue}/>
 				
 				<div className="graph-wrapper">
 					<div className="bar">
@@ -30,7 +31,7 @@ export default class Dashboard extends Component {
 								<Typography style={{fontSize: 16, fontWeight: 'bold'}} color="textSecondary" gutterBottom>
 									Total Value of All Assets ($)
 								</Typography>
-								<BarGraph stock={this.state.stock} crypto={this.state.crypto} />
+								<BarGraph stock={this.props.stock} crypto={this.props.crypto} />
 							</CardContent>
 						</Card>
 					</div>
@@ -40,13 +41,13 @@ export default class Dashboard extends Component {
 								<Typography style={{fontSize: 16, fontWeight: 'bold'}} color="textSecondary" gutterBottom>
 									Asset Value Percentage (%)
 								</Typography>
-								<PieGraph stock={this.state.stock} crypto={this.state.crypto} portfolioValue={this.props.portfolioValue} />
+								<PieGraph stock={this.props.stock} crypto={this.props.crypto} portfolioValue={this.props.portfolioValue} />
 							</CardContent>
 						</Card>
 					</div>
 				</div>
 				
-				<AssetTableTab stock={this.state.stock} crypto={this.state.crypto} />
+				<AssetTableTab stock={this.props.stock} crypto={this.props.crypto} />
 			</div>
 		);
 	}

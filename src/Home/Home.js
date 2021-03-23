@@ -32,7 +32,6 @@ export default class Home extends Component {
 		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
 		this.assets = setInterval(() => {
 			this.loadData(this.state.token)
-			console.log(this.state.crypto)
 		}, 10000);
 	}
 
