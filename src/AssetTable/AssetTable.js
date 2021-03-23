@@ -55,12 +55,12 @@ class AssetTable extends Component {
     return arr
   }
 
-  prettifyData(data) {
+  prettifyData(data, label) {
     if(typeof(data) == 'string'){
       return helper.capitalizeAll(data);
     }
     else if (typeof(data) == 'number'){
-      if(data % 1 == 0){
+      if(label == 'shares' || label == 'amount'){
         return helper.prettifyNumber(data);
       }
       return helper.prettifyPrice(data);
@@ -116,7 +116,7 @@ class AssetTable extends Component {
                         const value = row[column.label];
                         return (
                           <TableCell key={column.label}>
-                            {this.prettifyData(value)}
+                            {this.prettifyData(value, column.label)}
                           </TableCell>
                         );
                       })}

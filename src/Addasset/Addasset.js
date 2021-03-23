@@ -15,6 +15,7 @@ import { Card, CardContent, Typography, IconButton, Tooltip, List, ListItem, Lis
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import helper from '../helper.js';
+import LoadScreen from '../LoadScreen/LoadScreen';
 
 
 
@@ -35,6 +36,8 @@ export default class Addasset extends Component {
       amount: null,
       open1: false,
       open2: false,
+      open3: false,
+      open4: false,
     };
 
     this.addStock = this.addStock.bind(this);
@@ -168,6 +171,7 @@ export default class Addasset extends Component {
     const url = 'https://my-taurus.herokuapp.com/crypto/remove'
 
     const params = new URLSearchParams();
+    console.log(this.state.cryptoSymbol)
     params.append('symbol', this.state.cryptoSymbol);
 
     const config = {
@@ -179,7 +183,6 @@ export default class Addasset extends Component {
 
     await axios.post(url, params, config);
     this.loadData(this.state.token);
-
   }
 
   async removeStock(e) {
@@ -201,6 +204,7 @@ export default class Addasset extends Component {
   }
 
   render() {
+    //For stock modals
     const handleClickOpen1 = () => {
       this.setState({open1: true});
     }
@@ -217,17 +221,34 @@ export default class Addasset extends Component {
       this.setState({open2: false});
     }
 
+    //For crypto modals
+    const handleClickOpen3 = () => {
+      this.setState({open3: true});
+    }
+
+    const handleClose3 = () => {
+      this.setState({open3: false});
+    }
+
+    const handleClickOpen4 = () => {
+      this.setState({open4: true});
+    }
+
+    const handleClose4 = () => {
+      this.setState({open4: false});
+    }
+
     if (this.state.initializing) {
-      return <div />
+      return <LoadScreen />
     }
     return (
-      <div className="Addasset-wrapper">
+      <div className="modal-wrapper">
         <Dialog open={this.state.open1} onClose={handleClose1} aria-labelledby="form-dialog-title">
           <form onSubmit={this.addStock}>
-            <DialogTitle id="form-dialog-title">Add Asset</DialogTitle>
+            <DialogTitle id="form-dialog-title">Add Stock</DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Please enter the desired asset symbol and number of shares that you wish to add.
+                Please enter the desired stock ticker symbol and number of shares that you wish to add.
               </DialogContentText>
               <div className="textfield-wrapper">
                 <TextField
@@ -257,7 +278,7 @@ export default class Addasset extends Component {
                 Cancel
               </Button>
               <Button type="submit" onClick={handleClose1} color="primary">
-                Add
+                Add Stock
               </Button>
             </DialogActions>
           </form>
@@ -265,7 +286,7 @@ export default class Addasset extends Component {
 
         <Dialog open={this.state.open2} onClose={handleClose2} aria-labelledby="form-dialog-title">
           <form onSubmit={this.removeStock}>
-            <DialogTitle id="form-dialog-title">Remove Asset</DialogTitle>
+            <DialogTitle id="form-dialog-title">Remove Stock</DialogTitle>
             <DialogContent>
               <DialogContentText>
               Please enter the desired asset symbol that you wish to remove.
@@ -288,11 +309,85 @@ export default class Addasset extends Component {
                 Cancel
               </Button>
               <Button type="submit" onClick={handleClose2} color="primary">
-                Remove
+                Remove Stock
               </Button>
             </DialogActions>
           </form>
         </Dialog>
+
+        <Dialog open={this.state.open3} onClose={handleClose3} aria-labelledby="form-dialog-title">
+          <form onSubmit={this.addCrypto}>
+            <DialogTitle id="form-dialog-title">Add Cryptocurrency</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Please enter the desired cryptocurrency symbol and amount that you wish to add.
+              </DialogContentText>
+              <div className="textfield-wrapper">
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  variant="outlined"
+                  name="cryptoSymbol"
+                  value={this.state.cryptoSymbol}
+                  label="Symbol"
+                  onChange={this.handleChange}
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  variant="outlined"
+                  name="amount"
+                  value={this.state.amount}
+                  label="Amount"
+                  type="number"
+                  onChange={this.handleChange}
+                />
+              </div>
+              
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose3} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" onClick={handleClose3} color="primary">
+                Add Crypto
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+
+        <Dialog open={this.state.open4} onClose={handleClose4} aria-labelledby="form-dialog-title">
+          <form onSubmit={this.removeCrypto}>
+            <DialogTitle id="form-dialog-title">Remove Cryptocurrency</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+              Please enter the desired asset symbol that you wish to remove.
+              </DialogContentText>
+                <div className="textfield-wrapper">
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    variant="outlined"
+                    name="cryptoSymbol"
+                    value={this.state.cryptoSymbol}
+                    label="Symbol"
+                    onChange={this.handleChange}
+                    type="text"
+                  />
+                </div>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose4} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" onClick={handleClose4} color="primary">
+                Remove Crypto
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+
+
       <div className="table-wrapper">
         <div style={{width: '48%'}}>
           <Card> 
@@ -323,6 +418,16 @@ export default class Addasset extends Component {
                 <Typography style={{fontSize: 16, fontWeight: 'bold'}} color="textSecondary" gutterBottom>
                   Your Cryptocurrencies
                 </Typography>
+                <Tooltip title="Remove Crypto">
+                  <IconButton color="inherit" onClick={handleClickOpen4} style={{float: 'right'}} size='small'>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Add Crypto">
+                  <IconButton color="inherit" onClick={handleClickOpen3} style={{float: 'right'}} size='small'>
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
                 <Typography style={{fontSize: 22, marginBottom: '10px'}} color="textPrimary">
                   { this.generateCryptoValue() }
                 </Typography>
