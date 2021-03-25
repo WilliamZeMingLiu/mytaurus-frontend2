@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar({ component: RouteComponent, portfolioValue, stock, crypto}) {
+export default function NavBar({ component: RouteComponent, portfolioValue, stock, crypto, loadData}) {
   const classes = useStyles();
   const [drop, setDrop] = React.useState(false);
 
@@ -182,7 +182,7 @@ export default function NavBar({ component: RouteComponent, portfolioValue, stoc
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <RouteComponent portfolioValue={portfolioValue} stock={stock} crypto={crypto} />
+        <RouteComponent portfolioValue={portfolioValue} stock={stock} crypto={crypto} loadData={loadData}/>
       </main>
     </div>
   );

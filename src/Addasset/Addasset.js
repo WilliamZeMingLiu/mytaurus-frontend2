@@ -26,10 +26,7 @@ export default class Addasset extends Component {
     super(props);
     this.state = {
       token: null,
-      initializing: true,
-      portfolioValue: null,
-      stock: null,
-      crypto: null,
+      initializing: false,
       symbol: null,
       shares: null,
       cryptoSymbol: null,
@@ -39,7 +36,8 @@ export default class Addasset extends Component {
       open3: false,
       open4: false,
     };
-
+    
+    this.loadData = this.props.loadData;
     this.addStock = this.addStock.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.addCrypto = this.addCrypto.bind(this);
@@ -52,13 +50,13 @@ export default class Addasset extends Component {
 
   componentDidMount() {
     const { currentUser } = this.context;
-    currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
+    currentUser.getIdToken(true).then(idtoken => this.setState({token: idtoken}));
   }
 
   generateStockValue() {
 		var stock = 0.0;
-		if(this.state.stock != null){
-			const stocks = this.state.stock;
+		if(this.props.stock != null){
+			const stocks = this.props.stock;
 			stocks.map((obj) => {
 				stock += obj.price * obj.shares;
 			})
@@ -68,8 +66,8 @@ export default class Addasset extends Component {
 	generateCryptoValue() {
 		var crypto = 0.0;
 		// console.log(this.props.crypto)
-		if(this.state.crypto != null){
-			const cryptos = this.state.crypto
+		if(this.props.crypto != null){
+			const cryptos = this.props.crypto
 			cryptos.map((obj) => {
 				crypto += obj.price * obj.amount;
 			})
@@ -78,8 +76,8 @@ export default class Addasset extends Component {
 	}
   generateStockPoints() {
     var arr = [];
-    if(this.state.stock != null){
-      arr = this.state.stock;
+    if(this.props.stock != null){
+      arr = this.props.stock;
       arr.sort((a, b) => (a.price <= b.price) ? -1 : 1)
     }
     return arr
@@ -87,41 +85,11 @@ export default class Addasset extends Component {
 
   generateCryptoPoints() {
     var arr = [];
-    if(this.state.crypto != null){
-      arr = this.state.crypto;
+    if(this.props.crypto != null){
+      arr = this.props.crypto;
       arr.sort((a, b) => (a.price <= b.price) ? -1 : 1)
     }
     return arr
-  }
-
-  loadData(token) {
-    console.log(token)
-    const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
-    const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
-
-    let config = {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-
-    axios.all([
-      axios.get(stockURL, config),
-      axios.get(cryptoURL, config)
-    ])
-      .then(responseArr => {
-        const stockData = responseArr[0].data;
-        const cryptoData = responseArr[1].data;
-
-        this.setState({
-          token: token,
-          initializing: false,
-          portfolioValue: stockData['total-value'] + cryptoData['total-value'],
-          stock: stockData['stocks'],
-          crypto: cryptoData['crypto']
-        });
-
-      });
   }
 
   handleChange = (e) => {
@@ -408,7 +376,7 @@ export default class Addasset extends Component {
                 <Typography style={{fontSize: 22, marginBottom: '10px'}} color="textPrimary">
                   { this.generateStockValue() }
                 </Typography>
-                <AssetTable data={this.state.stock} />
+                <AssetTable data={this.props.stock} />
               </CardContent>
           </Card>
         </div>
@@ -431,7 +399,7 @@ export default class Addasset extends Component {
                 <Typography style={{fontSize: 22, marginBottom: '10px'}} color="textPrimary">
                   { this.generateCryptoValue() }
                 </Typography>
-                <AssetTable data={this.state.crypto} />
+                <AssetTable data={this.props.crypto} />
               </CardContent>
           </Card>
         </div>
