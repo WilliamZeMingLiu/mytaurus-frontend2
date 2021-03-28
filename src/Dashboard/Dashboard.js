@@ -29,7 +29,7 @@ export default class Dashboard extends Component {
 						<Card>
 							<CardContent>
 								<Typography style={{fontSize: 16, fontWeight: 'bold'}} color="textSecondary" gutterBottom>
-									Total Value of All Assets ($)
+									Total Value of Each Asset ($)
 								</Typography>
 								<BarGraph stock={this.props.stock} crypto={this.props.crypto} />
 							</CardContent>
@@ -39,7 +39,7 @@ export default class Dashboard extends Component {
 						<Card>
 							<CardContent>
 								<Typography style={{fontSize: 16, fontWeight: 'bold'}} color="textSecondary" gutterBottom>
-									Asset Value Percentage (%)
+									Share of Net Worth (%)
 								</Typography>
 								<PieGraph stock={this.props.stock} crypto={this.props.crypto} portfolioValue={this.props.portfolioValue} />
 							</CardContent>

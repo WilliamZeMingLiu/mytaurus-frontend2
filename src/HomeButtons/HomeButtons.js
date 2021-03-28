@@ -71,7 +71,7 @@ class HomeButtons extends Component {
 				<Card className={classes.root}>
 					<CardContent>
 						<Typography className={classes.title} color="textSecondary" gutterBottom>
-							{ helper.capitalizeAll('total assets') }
+							{ helper.capitalizeAll('net worth') }
 						</Typography>
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateTotalValue() }
