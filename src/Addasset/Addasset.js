@@ -26,6 +26,8 @@ export default class Addasset extends Component {
     super(props);
     this.state = {
       token: null,
+      suggestionList: null,
+      isHidden: true,
       initializing: false,
       symbol: null,
       shares: null,
@@ -38,6 +40,7 @@ export default class Addasset extends Component {
     };
     
     this.loadData = this.props.loadData;
+    this.searchStock = this.searchStock.bind(this)
     this.addStock = this.addStock.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.addCrypto = this.addCrypto.bind(this);
@@ -94,6 +97,28 @@ export default class Addasset extends Component {
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
+  }
+
+  updateField = (field, value) => {
+    this.setState({[field]: value})
+    this.searchStock(value)
+  }
+
+  async searchStock(value) {
+    const url = 'https://my-taurus.herokuapp.com/stocks/search'
+
+    const params = new URLSearchParams();
+    params.append('symbol', value);
+
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${this.state.token}`
+      }
+    }
+
+    let result = await axios.post(url, params, config)
+    this.setState({suggestionList: result.data.suggestions})
+    console.log(this.state.suggestionList)
   }
 
   async addStock(e) {
@@ -223,10 +248,10 @@ export default class Addasset extends Component {
                   autoFocus
                   margin="dense"
                   variant="outlined"
-                  name="symbol"
+                  name="name"
                   value={this.state.symbol}
                   label="Symbol"
-                  onChange={this.handleChange}
+                  onChange={e => this.updateField("symbol", e.target.value)}
                 />
                 <TextField
                   autoFocus
