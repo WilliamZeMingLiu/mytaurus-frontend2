@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './AssetTable.css';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -63,9 +64,22 @@ class AssetTable extends Component {
       if(label == 'shares' || label == 'amount'){
         return helper.prettifyNumber(data);
       }
+      else if(label == 'change') {
+        return helper.prettifyChange(data);
+      }
       return helper.prettifyPrice(data);
     }
     return data
+  }
+  
+  colorChange(num) {
+    if(num > 0){
+      return 'green';
+    }
+    else if(num < 0){
+      return 'red';
+    }
+    return '';
   }
 
   render() {
@@ -91,8 +105,9 @@ class AssetTable extends Component {
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
             <colgroup>
-                <col width="20%" />
-                <col width="20%" />
+                <col width="30%" />
+                <col width="30%" />
+                <col width="30%" />
                 <col width="10%" />
             </colgroup>
               <TableHead>
@@ -114,8 +129,17 @@ class AssetTable extends Component {
                     <TableRow hover role="checkbox" tabIndex={-1} key={row.name}>
                       {columns.map((column) => {
                         const value = row[column.label];
+                        var perColor = '';
+                        if(column.label == 'change' && value != 0){
+                          if(value > 0){
+                            perColor = '#00a152';
+                          }
+                          else {
+                            perColor = '#ff3d00';
+                          }
+                        }
                         return (
-                          <TableCell key={column.label}>
+                          <TableCell key={column.label} style={{color:perColor}}>
                             {this.prettifyData(value, column.label)}
                           </TableCell>
                         );

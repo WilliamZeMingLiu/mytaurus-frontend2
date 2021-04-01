@@ -11,7 +11,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import 'reactjs-popup/dist/index.css';
 import { AuthContext } from '../Auth';
 import axios from 'axios';
-import { Card, CardContent, Typography, IconButton, Tooltip, List, ListItem, ListItemText } from '@material-ui/core';
+import { Card, CardContent, Typography, IconButton, Tooltip } from '@material-ui/core';
+import AutoComplete from '@material-ui/lab/Autocomplete';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import helper from '../helper.js';
@@ -26,7 +27,7 @@ export default class Addasset extends Component {
     super(props);
     this.state = {
       token: null,
-      suggestionList: null,
+      suggestionList: [],
       isHidden: true,
       initializing: false,
       symbol: null,
@@ -68,13 +69,13 @@ export default class Addasset extends Component {
 	}
 	generateCryptoValue() {
 		var crypto = 0.0;
-		// console.log(this.props.crypto)
 		if(this.props.crypto != null){
 			const cryptos = this.props.crypto
 			cryptos.map((obj) => {
 				crypto += obj.price * obj.amount;
 			})
 		}
+    console.log(this.props.crypto)
 		return helper.prettifyPrice(crypto);
 	}
   generateStockPoints() {
@@ -179,6 +180,7 @@ export default class Addasset extends Component {
   }
 
   async removeStock(e) {
+    console.log("E:" + this.state.symbol);
     e.preventDefault();
     const url = 'https://my-taurus.herokuapp.com/stocks/remove'
 
@@ -244,16 +246,24 @@ export default class Addasset extends Component {
                 Please enter the desired stock ticker symbol and number of shares that you wish to add.
               </DialogContentText>
               <div className="textfield-wrapper">
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  variant="outlined"
-                  name="name"
-                  value={this.state.symbol}
-                  label="Symbol"
-                  onChange={e => this.updateField("symbol", e.target.value)}
+                <AutoComplete
+                  id="combo-box-demo"
+                  options={this.state.suggestionList}
+                  getOptionLabel={(stock) => stock.symbol}
+                  style={{ width: 170 }}
+                  renderInput={(params) => 
+                    <TextField {...params} 
+                      autoFocus 
+                      margin="dense" 
+                      variant="outlined" 
+                      name="name" 
+                      value={this.state.symbol} 
+                      label="Symbol" 
+                      onChange={e => this.updateField("symbol", e.target.value)} 
+                    />}
                 />
                 <TextField
+                  style={{ width: 170 }}
                   autoFocus
                   margin="dense"
                   variant="outlined"
@@ -282,18 +292,25 @@ export default class Addasset extends Component {
             <DialogTitle id="form-dialog-title">Remove Stock</DialogTitle>
             <DialogContent>
               <DialogContentText>
-              Please enter the desired asset symbol that you wish to remove.
+              Please enter the desired stock ticker symbol that you wish to remove.
               </DialogContentText>
                 <div className="textfield-wrapper">
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    variant="outlined"
-                    name="symbol"
-                    value={this.state.symbol}
-                    label="Symbol"
-                    onChange={this.handleChange}
-                    type="text"
+                  <AutoComplete
+                    id="combo-box-demo"
+                    options={this.props.stock}
+                    getOptionLabel={(stock) => helper.capitalizeAll(stock.symbol)}
+                    style={{ width: 170 }}
+                    renderInput={(params) => 
+                      <TextField {...params}
+                        autoFocus
+                        margin="dense"
+                        variant="outlined"
+                        name="symbol"
+                        value={this.state.symbol}
+                        label="Symbol"
+                        onChange={this.handleChange}
+                        type="text"
+                      />}
                   />
                 </div>
             </DialogContent>
@@ -354,7 +371,7 @@ export default class Addasset extends Component {
             <DialogTitle id="form-dialog-title">Remove Cryptocurrency</DialogTitle>
             <DialogContent>
               <DialogContentText>
-              Please enter the desired asset symbol that you wish to remove.
+              Please enter the desired cryptocurrency symbol that you wish to remove.
               </DialogContentText>
                 <div className="textfield-wrapper">
                   <TextField

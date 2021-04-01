@@ -2,6 +2,16 @@ const helpers = {
     prettifyPrice: function(num) {
         return '$' + num.toFixed(2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     },
+    prettifyChange: function(num) {
+        var sign = '';
+        if(num > 0){
+            sign = '+'
+        }
+        else if(num < 0){
+            sign = '-'
+        }
+        return sign + '$' + Math.abs(num.toFixed(2)).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    },
     prettifyNumber: function(num) {
         return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     },

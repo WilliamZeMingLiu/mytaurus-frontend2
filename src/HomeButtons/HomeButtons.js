@@ -1,6 +1,6 @@
 import './HomeButtons.css';
 import React, { Component } from "react";
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Chip, Card, CardContent, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import helper from '../helper.js';
 
@@ -42,10 +42,50 @@ class HomeButtons extends Component {
 				crypto += obj.price * obj.amount;
 			})
 		}
+		console.log(this.props);
 		return helper.prettifyPrice(crypto);
+	}
+	generateStockChange() {
+		var total = 0;
+		if(this.props.stock != null){
+			const stocks = this.props.stock;
+			stocks.map((obj) => {
+				total += obj.change * obj.shares;
+			})
+		}
+		return total;
+	}
+	generateCryptoChange() {
+		var total = 0;
+		if(this.props.crypto != null){
+			const crypto = this.props.crypto;
+			crypto.map((obj) => {
+				console.log(obj);
+				total += obj.change * obj.amount;
+			})
+		}
+		return total;
+	}
+	generateTotalChange() {
+		var cTotal = 0;
+		var sTotal = 0;
+		if(this.props.crypto != null){
+			const crypto = this.props.crypto;
+			crypto.map((obj) => {
+				cTotal += obj.change * obj.amount;
+			})
+		}
+		if(this.props.stock != null){
+			const stocks = this.props.stock;
+			stocks.map((obj) => {
+				sTotal += obj.change * obj.shares;
+			})
+		}
+		return cTotal+sTotal;
 	}
 	render(){
 		const { classes } = this.props;
+		
 		return (
 			<div className="button-wrapper-1">
 				<Card className={classes.root}>
@@ -56,6 +96,12 @@ class HomeButtons extends Component {
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateCryptoValue() }
 						</Typography>
+						<Chip
+							label={helper.prettifyChange(this.generateCryptoChange())}
+							className="assetBadge"
+							color="primary"
+							style={{ backgroundColor: `${this.generateCryptoChange() >= 0 ? '#00a152' : '#ff3d00' }`, fontSize: 18}}
+						/>
 					</CardContent>
 				</Card>
 				<Card className={classes.root}>
@@ -66,6 +112,12 @@ class HomeButtons extends Component {
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateStockValue() }
 						</Typography>
+						<Chip
+							label={helper.prettifyChange(this.generateStockChange())}
+							className="assetBadge"
+							color="primary"
+							style={{ backgroundColor: `${this.generateStockChange() >= 0 ? '#00a152' : '#ff3d00' }`, fontSize: 18}}
+						/>
 					</CardContent>
 				</Card>
 				<Card className={classes.root}>
@@ -76,6 +128,12 @@ class HomeButtons extends Component {
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateTotalValue() }
 						</Typography>
+						<Chip
+							label={helper.prettifyChange(this.generateTotalChange())}
+							className="assetBadge"
+							color="primary"
+							style={{ backgroundColor: `${this.generateTotalChange() >= 0 ? '#00a152' : '#ff3d00' }`, fontSize: 18}}
+						/>
 					</CardContent>
 				</Card>
 			</div>	
