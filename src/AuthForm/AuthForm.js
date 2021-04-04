@@ -14,17 +14,6 @@ import { Redirect } from 'react-router-dom';
 import { withRouter } from "react-router";
 
 
-async function authenticateUser(email, password, isLogin) {
-  try {
-    const user = isLogin
-      ? await auth.signInWithEmailAndPassword(email, password)
-      : await auth.createUserWithEmailAndPassword(email, password);
-    console.log(user);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 function renderLoggedIn() {
   return (
     <Redirect to="/" />
@@ -43,6 +32,18 @@ function AuthForm() {
   const [signupPassword, setSignupPassword] = useState("");
 
   auth.onAuthStateChanged((user) => setUser(user));
+
+  async function authenticateUser(email, password, isLogin) {
+    try {
+      const user = isLogin
+        ? await auth.signInWithEmailAndPassword(email, password)
+        : await auth.createUserWithEmailAndPassword(email, password);
+      console.log(user);
+    } catch (err) {
+      setError(err.message);
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     if (!user) {
@@ -77,11 +78,6 @@ function AuthForm() {
               </Menu>
               {isLogin ? (
                 <Fragment>
-                {error !== null && (
-                     <div className="py-4 bg-red-600 w-full text-white text-center mb-3">
-                       {error}
-                     </div>
-                   )}
                   <Form>
                     <Form.Field className="auth-form-fields">
                       <label className="form-labels">Email</label>
@@ -103,6 +99,11 @@ function AuthForm() {
                         onChange={(e) => setLoginPassword(e.target.value)}
                       ></input>
                     </Form.Field>
+                    {error !== null && (
+                     <div className="py-4 bg-red-600 w-full text-white text-center mb-3" style={{color: '#ff3d00'}}>
+                      {error}                       
+                     </div>
+                   )}
                     <Button
                       onClick={() => authenticateUser(loginEmail, loginPassword, true)}
                       className="auth-form-buttons"
