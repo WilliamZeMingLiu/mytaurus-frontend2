@@ -38,10 +38,13 @@ export default class Addasset extends Component {
       open2: false,
       open3: false,
       open4: false,
+      cryptoList: null,
+      cryptoSuggestionList: []
     };
     
     this.loadData = this.props.loadData;
-    this.searchStock = this.searchStock.bind(this)
+    this.searchStock = this.searchStock.bind(this);
+    this.getCryptoList = this.getCryptoList.bind(this);
     this.addStock = this.addStock.bind(this);
     this.removeStock = this.removeStock.bind(this);
     this.addCrypto = this.addCrypto.bind(this);
@@ -54,7 +57,21 @@ export default class Addasset extends Component {
 
   componentDidMount() {
     const { currentUser } = this.context;
-    currentUser.getIdToken(true).then(idtoken => this.setState({token: idtoken}));
+    currentUser.getIdToken(true).then(idtoken => {
+      this.setState({token: idtoken}) 
+      this.getCryptoList(idtoken) 
+    })
+  }
+
+  async getCryptoList(token){
+    const cryptoListURL = "https://my-taurus.herokuapp.com/crypto/list";
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }    
+    let result = await axios.get(cryptoListURL, config)
+    this.setState({cryptoList: result.data})
   }
 
   generateStockValue() {
@@ -75,7 +92,7 @@ export default class Addasset extends Component {
 				crypto += obj.price * obj.amount;
 			})
 		}
-    console.log(this.props.crypto)
+    // console.log(this.props.crypto)
 		return helper.prettifyPrice(crypto);
 	}
   generateStockPoints() {
@@ -105,6 +122,21 @@ export default class Addasset extends Component {
     this.searchStock(value)
   }
 
+  updateCryptoField = (field, value) => {
+    this.setState({[field]: value})
+    let list = this.state.cryptoList
+    var result = list.filter(function(item) {
+      return item.symbol.toLowerCase().includes(value);
+    });
+    console.log(value)
+    console.log(result)
+    this.setState({
+      cryptoSuggestionList: result.slice(0,10)
+    }, () => {
+      console.log(this.state.cryptoSuggestionList);
+    });    
+  }
+
   async searchStock(value) {
     const url = 'https://my-taurus.herokuapp.com/stocks/search'
 
@@ -119,7 +151,6 @@ export default class Addasset extends Component {
 
     let result = await axios.post(url, params, config)
     this.setState({suggestionList: result.data.suggestions})
-    console.log(this.state.suggestionList)
   }
 
   async addStock(e) {
@@ -340,8 +371,8 @@ export default class Addasset extends Component {
                   name="cryptoSymbol"
                   value={this.state.cryptoSymbol}
                   label="Symbol"
-                  onChange={this.handleChange}
-                />
+                  onChange={e => this.updateCryptoField("symbol", e.target.value)} 
+                  />
                 <TextField
                   autoFocus
                   margin="dense"

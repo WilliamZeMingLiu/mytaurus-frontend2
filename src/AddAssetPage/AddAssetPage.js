@@ -30,7 +30,7 @@ export default class AddAssetPage extends Component {
 		currentUser.getIdToken(true).then(idtoken => this.loadData(idtoken));
 		this.assets = setInterval(() => {
 			this.loadData(this.state.token)
-		}, 20000);
+		}, 10000);
 	}
 
 	componentWillUnmount() {
