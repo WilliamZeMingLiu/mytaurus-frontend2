@@ -1,7 +1,7 @@
 import './Addasset.css';
 import React, { Component } from "react";
 import AssetTable from '../AssetTable/AssetTable';
-import { Button } from '@material-ui/core';
+import { Button, Avatar } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -63,17 +63,6 @@ export default class Addasset extends Component {
     })
   }
 
-  async getCryptoList(token){
-    const cryptoListURL = "https://my-taurus.herokuapp.com/crypto/list";
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }    
-    let result = await axios.get(cryptoListURL, config)
-    this.setState({cryptoList: result.data})
-  }
-
   generateStockValue() {
 		var stock = 0.0;
 		if(this.props.stock != null){
@@ -128,13 +117,24 @@ export default class Addasset extends Component {
     var result = list.filter(function(item) {
       return item.symbol.toLowerCase().includes(value);
     });
-    console.log(value)
-    console.log(result)
+    //console.log(value)
+    //console.log(result)
     this.setState({
       cryptoSuggestionList: result.slice(0,10)
     }, () => {
       console.log(this.state.cryptoSuggestionList);
     });    
+  }
+
+  async getCryptoList(token){
+    const cryptoListURL = "https://my-taurus.herokuapp.com/crypto/list";
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }    
+    let result = await axios.get(cryptoListURL, config)
+    this.setState({cryptoList: result.data})
   }
 
   async searchStock(value) {
@@ -196,7 +196,7 @@ export default class Addasset extends Component {
     const url = 'https://my-taurus.herokuapp.com/crypto/remove'
 
     const params = new URLSearchParams();
-    console.log(this.state.cryptoSymbol)
+    //console.log(this.state.cryptoSymbol)
     params.append('symbol', this.state.cryptoSymbol);
 
     const config = {
@@ -211,7 +211,7 @@ export default class Addasset extends Component {
   }
 
   async removeStock(e) {
-    console.log("E:" + this.state.symbol);
+    //console.log("E:" + this.state.symbol);
     e.preventDefault();
     const url = 'https://my-taurus.herokuapp.com/stocks/remove'
 
@@ -364,15 +364,28 @@ export default class Addasset extends Component {
                 Please enter the desired cryptocurrency symbol and amount that you wish to add.
               </DialogContentText>
               <div className="textfield-wrapper">
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  variant="outlined"
-                  name="cryptoSymbol"
-                  value={this.state.cryptoSymbol}
-                  label="Symbol"
-                  onChange={e => this.updateCryptoField("symbol", e.target.value)} 
-                  />
+                <AutoComplete
+                  id="combo-box-demo"
+                  options={this.state.cryptoSuggestionList}
+                  getOptionLabel={(crypto) => crypto.symbol}
+                  renderOption={(option) => (
+                    <React.Fragment>
+                      <Avatar alt="" src={option.icon} style={{width: '30px', height: '30px', marginRight: '5px'}} />
+                      {option.symbol}
+                    </React.Fragment>
+                  )}
+                  style={{ width: 170 }}
+                  renderInput={(params) => 
+                    <TextField {...params} 
+                      autoFocus 
+                      margin="dense" 
+                      variant="outlined" 
+                      name="name" 
+                      value={this.state.cryptoSymbol} 
+                      label="Symbol" 
+                      onChange={e => this.updateCryptoField("cryptoSymbol", e.target.value)} 
+                    />}
+                />
                 <TextField
                   autoFocus
                   margin="dense"
@@ -405,15 +418,22 @@ export default class Addasset extends Component {
               Please enter the desired cryptocurrency symbol that you wish to remove.
               </DialogContentText>
                 <div className="textfield-wrapper">
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    variant="outlined"
-                    name="cryptoSymbol"
-                    value={this.state.cryptoSymbol}
-                    label="Symbol"
-                    onChange={this.handleChange}
-                    type="text"
+                <AutoComplete
+                    id="combo-box-demo"
+                    options={this.props.crypto}
+                    getOptionLabel={(crypto) => helper.capitalizeAll(crypto.symbol)}
+                    style={{ width: 170 }}
+                    renderInput={(params) => 
+                      <TextField {...params}
+                        autoFocus
+                        margin="dense"
+                        variant="outlined"
+                        name="symbol"
+                        value={this.state.cryptoSymbol}
+                        label="Symbol"
+                        onChange={this.handleChange}
+                        type="text"
+                      />}
                   />
                 </div>
             </DialogContent>
@@ -449,7 +469,7 @@ export default class Addasset extends Component {
                 <Typography style={{fontSize: 22, marginBottom: '10px'}} color="textPrimary">
                   { this.generateStockValue() }
                 </Typography>
-                <AssetTable data={this.props.stock} />
+                <AssetTable data={this.props.stock} type='stock'/>
               </CardContent>
           </Card>
         </div>
@@ -472,7 +492,7 @@ export default class Addasset extends Component {
                 <Typography style={{fontSize: 22, marginBottom: '10px'}} color="textPrimary">
                   { this.generateCryptoValue() }
                 </Typography>
-                <AssetTable data={this.props.crypto} />
+                <AssetTable data={this.props.crypto} type='crypto'/>
               </CardContent>
           </Card>
         </div>

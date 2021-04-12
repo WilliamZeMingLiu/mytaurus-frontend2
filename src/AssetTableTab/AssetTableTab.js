@@ -76,10 +76,10 @@ class AssetTableTab extends Component {
             </AppBar>
             <CardContent>
               <TabPanel value={this.state.value} index={0}>
-                  <AssetTable data={this.props.stock} />
+                  <AssetTable data={this.props.stock} type={"stock"}/>
               </TabPanel>
               <TabPanel value={this.state.value} index={1}>
-                  <AssetTable data={this.props.crypto} />
+                  <AssetTable data={this.props.crypto} type={"crypto"}/>
               </TabPanel>
             </CardContent>
           </Card>

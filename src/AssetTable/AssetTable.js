@@ -138,11 +138,22 @@ class AssetTable extends Component {
                             perColor = '#ff3d00';
                           }
                         }
-                        return (
-                          <TableCell key={column.label} style={{color:perColor}}>
-                            {this.prettifyData(value, column.label)}
-                          </TableCell>
-                        );
+                        if(column.label == 'symbol' && this.props.type == 'stock'){
+                          return (
+                            <TableCell key={column.label} style={{color:perColor}}>
+                              <a href={"/stock/" + value}>
+                                {this.prettifyData(value, column.label)}
+                              </a>
+                            </TableCell>
+                          );
+                        }
+                        else {
+                          return (
+                            <TableCell key={column.label} style={{color:perColor}}>
+                              {this.prettifyData(value, column.label)}
+                            </TableCell>
+                          );
+                        }
                       })}
                     </TableRow>
                   );

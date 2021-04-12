@@ -42,7 +42,7 @@ class HomeButtons extends Component {
 				crypto += obj.price * obj.amount;
 			})
 		}
-		console.log(this.props);
+		//console.log(this.props);
 		return helper.prettifyPrice(crypto);
 	}
 	generateStockChange() {
@@ -60,7 +60,7 @@ class HomeButtons extends Component {
 		if(this.props.crypto != null){
 			const crypto = this.props.crypto;
 			crypto.map((obj) => {
-				console.log(obj);
+				//console.log(obj);
 				total += obj.change * obj.amount;
 			})
 		}

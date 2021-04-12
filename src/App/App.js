@@ -3,8 +3,8 @@ import logo from '../logo.svg';
 import './App.css';
 import Home from '../Home/Home.js';
 import AuthForm from '../AuthForm/AuthForm.js';
-//import Addasset from '../Addasset/Addasset.js';
 import AddAssetPage from '../AddAssetPage/AddAssetPage.js';
+import StockPage from '../StockPage/StockPage.js';
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import PrivateRoute from '../PrivateRoute';
 import firebase from "firebase";
@@ -20,6 +20,7 @@ export default class App extends Component {
 	  		<PrivateRoute exact path="/" component={Home} />
 	  		<Route path="/login" component={AuthForm} />
         	<Route path="/addasset" component={AddAssetPage}/>
+        	<Route path="/stock/:symbol" render={(props) => <StockPage {...props} />} />
 	  	</BrowserRouter>
 	  </div>
 	</AuthProvider>

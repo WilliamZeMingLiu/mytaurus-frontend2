@@ -1,4 +1,5 @@
-import './Home.css';
+//import './StockPage.css';
+import {withRouter} from 'react-router';
 import React, { Component, useState, useEffect } from "react";
 import axios from 'axios';
 import NavBar from '../NavBar/NavBar';
@@ -9,21 +10,25 @@ import GraphTab from '../GraphTab/GraphTab';
 import { auth } from '../firebase';
 import { useContext } from 'react';
 import { AuthContext } from '../Auth';
-import Dashboard from '../Dashboard/Dashboard';
+import StockDashboard from '../StockDashboard/StockDashboard';
 import LoadScreen from '../LoadScreen/LoadScreen';
 
 
 
-export default class Home extends Component {
+class StockPage extends Component {
 	static contextType = AuthContext;
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			initializing: true,
+			token: null,
 			portfolioValue: null,
 			stock: null,
-			crypto: null
+			crypto: null,
+			symbol: this.props.match.params.symbol,
+			overview: null,
+			historical: null,
 		};
 	}
 
@@ -40,9 +45,13 @@ export default class Home extends Component {
 	  }
 
 	loadData(token) {
-		//console.log(token)
+		//console.log(token);
 		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
+		const overviewURL = "https://my-taurus.herokuapp.com/stocks/overview";
+		const historicalURL = "https://my-taurus.herokuapp.com/stocks/daily";
+		//"https://my-taurus.herokuapp.com/stocks/daily";
+		//"https://my-taurus.herokuapp.com/stocks/intraday";
 
 		let config = {
 			headers: {
@@ -50,23 +59,30 @@ export default class Home extends Component {
 			}
 		}
 
+		const params = new URLSearchParams();
+    	params.append('symbol', this.state.symbol);
+
 		axios.all([
 			axios.get(stockURL, config),
-			axios.get(cryptoURL, config)
+			axios.get(cryptoURL, config),
+			axios.post(overviewURL, params, config),
+			axios.post(historicalURL, params, config),
+			 //, overviewParams, config)
 		])
 			.then(responseArr => {
 				const stockData = responseArr[0].data;
 				const cryptoData = responseArr[1].data;
+				const overviewData = responseArr[2].data;
+				const historicalData = responseArr[3].data;
 
 				this.setState({
 					token: token,
 					initializing: false,
 					portfolioValue: stockData['total-value'] + cryptoData['total-value'],
-					stock: stockData['stocks'],
-					crypto: cryptoData['crypto']
+					overview: overviewData,
+					historical: historicalData,
 				});
 			});
-
 	}
 
 	render() {
@@ -77,8 +93,10 @@ export default class Home extends Component {
 		}
 		return (
 			<div className="Home">
-				<NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} />
+				<NavBar component={StockDashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} overview={this.state.overview} historical={this.state.historical} />
 			</div>
 		);
   }
 }
+
+export default withRouter(StockPage);
