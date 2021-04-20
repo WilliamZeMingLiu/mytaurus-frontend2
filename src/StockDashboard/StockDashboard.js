@@ -144,7 +144,7 @@ export default class StockDashboard extends Component {
 				  </div>
 			      	<br />
 			      	<div>
-				      	<Typography variant="h5" gutterBottom color="textSecondary">
+				      	<Typography variant="h6" gutterBottom color="textSecondary">
 					    	About
 					    </Typography>
 					    <Divider light />

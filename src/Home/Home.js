@@ -33,6 +33,8 @@ export default class Home extends Component {
 		this.assets = setInterval(() => {
 			this.loadData(this.state.token)
 		}, 10000);
+		console.log("CDM");
+		console.log(this.state.stock);
 	}
 
 	componentWillUnmount() {

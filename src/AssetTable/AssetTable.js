@@ -16,9 +16,6 @@ const useStyles = theme =>({
   root: {
     width: '100%',
   },
-  container: {
-    maxHeight: 440,
-  },
 });
 
 class AssetTable extends Component {
@@ -67,6 +64,9 @@ class AssetTable extends Component {
       else if(label == 'change') {
         return helper.prettifyChange(data);
       }
+      else if(label == 'percentchange'){
+        return helper.prettifyChangePercent(data);
+      }
       return helper.prettifyPrice(data);
     }
     return data
@@ -101,7 +101,7 @@ class AssetTable extends Component {
 
     return (
       <div>
-        <Paper className={classes.root}>
+        <Paper className={classes.root} style={{overflowY: ''}}>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
             <colgroup>
@@ -130,7 +130,7 @@ class AssetTable extends Component {
                       {columns.map((column) => {
                         const value = row[column.label];
                         var perColor = '';
-                        if(column.label == 'change' && value != 0){
+                        if((column.label=='percentchange' || column.label == 'change') && value != 0){
                           if(value > 0){
                             perColor = '#00a152';
                           }

@@ -38,7 +38,7 @@ export default class AddAssetPage extends Component {
 	}
 
 	loadData(token) {
-		console.log(token)
+		//console.log(token)
 		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
 

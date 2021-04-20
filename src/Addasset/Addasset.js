@@ -122,7 +122,7 @@ export default class Addasset extends Component {
     this.setState({
       cryptoSuggestionList: result.slice(0,10)
     }, () => {
-      console.log(this.state.cryptoSuggestionList);
+      //console.log(this.state.cryptoSuggestionList);
     });    
   }
 
@@ -211,7 +211,6 @@ export default class Addasset extends Component {
   }
 
   async removeStock(e) {
-    //console.log("E:" + this.state.symbol);
     e.preventDefault();
     const url = 'https://my-taurus.herokuapp.com/stocks/remove'
 
@@ -281,16 +280,19 @@ export default class Addasset extends Component {
                   id="combo-box-demo"
                   options={this.state.suggestionList}
                   getOptionLabel={(stock) => stock.symbol}
+                  getOptionSelected={(option, value) => option.symbol === value.symbol}
                   style={{ width: 170 }}
+                  inputValue={this.state.symbol}
+                  onInputChange={(event, newInputValue) => {
+                    this.updateField("symbol", newInputValue);
+                  }}
                   renderInput={(params) => 
                     <TextField {...params} 
                       autoFocus 
                       margin="dense" 
                       variant="outlined" 
                       name="name" 
-                      value={this.state.symbol} 
                       label="Symbol" 
-                      onChange={e => this.updateField("symbol", e.target.value)} 
                     />}
                 />
                 <TextField
@@ -330,16 +332,20 @@ export default class Addasset extends Component {
                     id="combo-box-demo"
                     options={this.props.stock}
                     getOptionLabel={(stock) => helper.capitalizeAll(stock.symbol)}
+                    getOptionSelected={(option, value) => option.symbol === value.symbol}
                     style={{ width: 170 }}
+                    inputValue={this.state.symbol}
+                    onInputChange={(event, newInputValue) => {
+                      this.updateField("symbol", newInputValue);
+                    }}
+
                     renderInput={(params) => 
                       <TextField {...params}
                         autoFocus
                         margin="dense"
                         variant="outlined"
                         name="symbol"
-                        value={this.state.symbol}
                         label="Symbol"
-                        onChange={this.handleChange}
                         type="text"
                       />}
                   />
@@ -368,6 +374,11 @@ export default class Addasset extends Component {
                   id="combo-box-demo"
                   options={this.state.cryptoSuggestionList}
                   getOptionLabel={(crypto) => crypto.symbol}
+                  getOptionSelected={(option, value) => option.symbol === value.symbol}
+                  inputValue={this.state.cryptoSymbol}
+                  onInputChange={(event, newInputValue) => {
+                    this.updateCryptoField("cryptoSymbol", newInputValue);
+                  }}
                   renderOption={(option) => (
                     <React.Fragment>
                       <Avatar alt="" src={option.icon} style={{width: '30px', height: '30px', marginRight: '5px'}} />
@@ -381,9 +392,7 @@ export default class Addasset extends Component {
                       margin="dense" 
                       variant="outlined" 
                       name="name" 
-                      value={this.state.cryptoSymbol} 
                       label="Symbol" 
-                      onChange={e => this.updateCryptoField("cryptoSymbol", e.target.value)} 
                     />}
                 />
                 <TextField
@@ -422,16 +431,19 @@ export default class Addasset extends Component {
                     id="combo-box-demo"
                     options={this.props.crypto}
                     getOptionLabel={(crypto) => helper.capitalizeAll(crypto.symbol)}
+                    getOptionSelected={(option, value) => option.symbol === value.symbol}
                     style={{ width: 170 }}
+                    inputValue={this.state.cryptoSymbol}
+                    onInputChange={(event, newInputValue) => {
+                      this.updateCryptoField("cryptoSymbol", newInputValue);
+                    }}
                     renderInput={(params) => 
                       <TextField {...params}
                         autoFocus
                         margin="dense"
                         variant="outlined"
                         name="symbol"
-                        value={this.state.cryptoSymbol}
                         label="Symbol"
-                        onChange={this.handleChange}
                         type="text"
                       />}
                   />

@@ -96,12 +96,16 @@ class HomeButtons extends Component {
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateCryptoValue() }
 						</Typography>
+						<Typography style={{fontSize: '10px'}} color="textSecondary">
+							Daily Change
+						</Typography>
 						<Chip
 							label={helper.prettifyChange(this.generateCryptoChange())}
 							className="assetBadge"
 							color="primary"
 							style={{ backgroundColor: `${this.generateCryptoChange() >= 0 ? '#00a152' : '#ff3d00' }`, fontSize: 18}}
 						/>
+						
 					</CardContent>
 				</Card>
 				<Card className={classes.root}>
@@ -111,6 +115,9 @@ class HomeButtons extends Component {
 						</Typography>
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateStockValue() }
+						</Typography>
+						<Typography style={{fontSize: '10px'}} color="textSecondary">
+							Daily Change
 						</Typography>
 						<Chip
 							label={helper.prettifyChange(this.generateStockChange())}
@@ -127,6 +134,9 @@ class HomeButtons extends Component {
 						</Typography>
 						<Typography className={classes.value} color="textPrimary">
 							{ this.generateTotalValue() }
+						</Typography>
+						<Typography style={{fontSize: '10px'}} color="textSecondary">
+							Daily Change
 						</Typography>
 						<Chip
 							label={helper.prettifyChange(this.generateTotalChange())}
