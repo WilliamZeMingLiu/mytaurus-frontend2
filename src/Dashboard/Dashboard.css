@@ -15,3 +15,17 @@
 .bar {
 	width: 48%;
 }
+
+.ketstat-container {
+	display: flex;
+	width: 100%;
+}
+
+.about {
+	margin-left: 16px;
+	width: 50%;
+}
+
+.about p {
+	font-size: 14pt;
+}

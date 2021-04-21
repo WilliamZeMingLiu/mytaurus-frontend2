@@ -43,6 +43,7 @@ export default class Home extends Component {
 		console.log(token)
 		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
+		const newsFeedURL = "https://my-taurus.herokuapp.com/stocks/news"
 
 		let config = {
 			headers: {
@@ -52,18 +53,25 @@ export default class Home extends Component {
 
 		axios.all([
 			axios.get(stockURL, config),
-			axios.get(cryptoURL, config)
+			axios.get(cryptoURL, config),
+			axios.post(newsFeedURL, {
+				"symbol": "AAPL"
+			}, config)
 		])
 			.then(responseArr => {
 				const stockData = responseArr[0].data;
 				const cryptoData = responseArr[1].data;
+				const newsfeedData = responseArr[2].data;
+
+				console.log(newsfeedData.overview)
 
 				this.setState({
 					token: token,
 					initializing: false,
 					portfolioValue: stockData['total-value'] + cryptoData['total-value'],
 					stock: stockData['stocks'],
-					crypto: cryptoData['crypto']
+					crypto: cryptoData['crypto'],
+					newsFeed: newsfeedData.overview
 				});
 			});
 
@@ -77,7 +85,7 @@ export default class Home extends Component {
 		}
 		return (
 			<div className="Home">
-				<NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} />
+				<NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} newsFeed={this.state.newsFeed} />
 			</div>
 		);
   }
