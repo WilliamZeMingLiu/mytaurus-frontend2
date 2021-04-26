@@ -4,6 +4,7 @@ import AssetTableTab from '../AssetTableTab/AssetTableTab';
 import HomeButtons from '../HomeButtons/HomeButtons';
 import PieGraph from '../PieGraph/PieGraph';
 import BarGraph from '../BarGraph/BarGraph';
+import LineGraphValue from '../LineGraphValue/LineGraphValue'
 import { Card, CardContent, Typography } from '@material-ui/core';
 
 
@@ -14,7 +15,8 @@ export default class Dashboard extends Component {
 		this.state = {
 			portfolioValue: this.props.portfolioValue,
 			stock: this.props.stock,
-			crypto: this.props.crypto
+			crypto: this.props.crypto,
+			value: this.props.value,
 		};
 	}
 
@@ -46,7 +48,14 @@ export default class Dashboard extends Component {
 						</Card>
 					</div>
 				</div>
-				
+				<Card  style={{marginBottom: '50px'}}>
+					<CardContent>
+						<Typography style={{fontSize: 16, fontWeight: 'bold'}} color="textSecondary" gutterBottom>
+							Portfolio Value Change
+						</Typography>
+						<LineGraphValue data={this.props.value} />
+					</CardContent>
+				</Card>
 				<AssetTableTab stock={this.props.stock} crypto={this.props.crypto} />
 			</div>
 		);

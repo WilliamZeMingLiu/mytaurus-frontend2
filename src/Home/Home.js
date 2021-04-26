@@ -23,7 +23,8 @@ export default class Home extends Component {
 			initializing: true,
 			portfolioValue: null,
 			stock: null,
-			crypto: null
+			crypto: null,
+			value: null,
 		};
 	}
 
@@ -33,8 +34,8 @@ export default class Home extends Component {
 		this.assets = setInterval(() => {
 			this.loadData(this.state.token)
 		}, 10000);
-		console.log("CDM");
-		console.log(this.state.stock);
+		//console.log("CDM");
+		//console.log(this.state.stock);
 	}
 
 	componentWillUnmount() {
@@ -45,6 +46,7 @@ export default class Home extends Component {
 		//console.log(token)
 		const stockURL = "https://my-taurus.herokuapp.com/stocks/all";
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
+		const valueURL = "https://my-taurus.herokuapp.com/values/all";
 
 		let config = {
 			headers: {
@@ -54,18 +56,22 @@ export default class Home extends Component {
 
 		axios.all([
 			axios.get(stockURL, config),
-			axios.get(cryptoURL, config)
+			axios.get(cryptoURL, config),
+			axios.get(valueURL, config),
+
 		])
 			.then(responseArr => {
 				const stockData = responseArr[0].data;
 				const cryptoData = responseArr[1].data;
+				const valueData = responseArr[2].data;
 
 				this.setState({
 					token: token,
 					initializing: false,
 					portfolioValue: stockData['total-value'] + cryptoData['total-value'],
 					stock: stockData['stocks'],
-					crypto: cryptoData['crypto']
+					crypto: cryptoData['crypto'],
+					value: valueData,
 				});
 			});
 
@@ -79,7 +85,13 @@ export default class Home extends Component {
 		}
 		return (
 			<div className="Home">
-				<NavBar component={Dashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} />
+				<NavBar 
+					component={Dashboard} 
+					portfolioValue={this.state.portfolioValue} 
+					stock={this.state.stock} 
+					crypto={this.state.crypto}
+					value={this.state.value}
+				/>
 			</div>
 		);
   }

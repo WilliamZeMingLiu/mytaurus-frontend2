@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import CanvasJSReact from '../assets/canvasjs.stock.react';
+import CanvasJSReact from '../assets/canvasjs.react';
 //import CanvasJSReact from '../assets/canvasjs.react';
-import './LineGraph.css';
 
 var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSStockChart;
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class LineGraph extends Component{
 	constructor() {
@@ -19,8 +18,8 @@ export default class LineGraph extends Component{
 	generateDataPoints() {
 		var dps = [];
 		if(this.props.data != null){
-			let properties = Object.keys(this.props.data.overview).reverse();
-			properties.forEach(prop => dps.push({x: new Date(prop), y: Number(this.props.data.overview[prop]['4. close'])}));
+			let properties = this.props.data;
+			properties.forEach(prop => dps.push({x: new Date(prop.date), y: Number(prop.stockValue + prop.cryptoValue)}));
 		}
 		return dps;
 	}
@@ -44,39 +43,29 @@ export default class LineGraph extends Component{
 
 	render() {
 		  const options = {
-		      charts: [{
-		      	  axisX: {
-			          crosshair: {
-			            enabled: true,
-			          }
-			        },
-			      axisY: {
-		            title: "Daily Close Price",
-		            prefix: "$",
-		            crosshair: {
-		              enabled: true,
-		              valueFormatString: "$#,###.##"
-		            }
-		          },
-		          toolTip: {
-		            shared: true
-		          },
-		          data: [{
-		            type: "area",
-		            name: "Price (in USD)",
-		            yValueFormatString: "$#,###.##",
-		            xValueFormatString: "DDDD, MMM DD, YYYY",
-		            dataPoints: this.state.graphData
-		         }]
-		      }]
-	    };
+			animationEnabled: true,
+			axisX: {
+				valueFormatString: "MMM DD YYYY",
+			},
+			axisY: {
+				title: "Current Total (in USD)",
+				prefix: "$",
+				gridThickness: 0,
+			},
+			data: [{
+				yValueFormatString: "$#,###",
+				xValueFormatString: "MMM DD YYYY",
+				type: "spline",
+				dataPoints: this.state.graphData,
+			}]
+		}
 	    const containerProps = {
 	      height: "500px",
 	      margin: "auto"
 	    };
 		
 		return (
-			<div className="wrapper">
+			<div>
 				<CanvasJSChart options={options}
 				  containerProps = {containerProps}
 		          onRef={ref => this.stockChart = ref}
