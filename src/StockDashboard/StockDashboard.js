@@ -6,6 +6,7 @@ import PieGraph from '../PieGraph/PieGraph';
 import BarGraph from '../BarGraph/BarGraph';
 import Grid from '@material-ui/core/Grid';
 import LineGraph from '../LineGraph/LineGraph';
+import NewsFeed from '../NewsFeed/NewsFeed';
 import helper from '../helper.js';
 import { Card, CardContent, Paper, Divider, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +20,7 @@ export default class StockDashboard extends Component {
 			crypto: this.props.crypto,
 			overview: this.props.overview,
 			historical: this.props.historical,
+			news: this.props.news,
 		};
 	}
 
@@ -142,17 +144,38 @@ export default class StockDashboard extends Component {
 					    </Typography>
 					</div>
 				  </div>
-			      	<br />
-			      	<div>
-				      	<Typography variant="h6" gutterBottom color="textSecondary">
-					    	About
+				  <br />
+				  <div>
+			      	<Typography variant="h6" gutterBottom color="textSecondary">
+				    	About
+				    </Typography>
+				    <Divider light />
+				    <br />
+					<Typography variant="body1" gutterBottom color="textPrimary">
+				        &emsp; &emsp; {this.state.overview.overview.Description}
+				    </Typography>
+			    </div>
+			    <br />
+				  	<div>
+					  	<Typography variant="h6" gutterBottom color="textSecondary">
+					    	News Feed
 					    </Typography>
 					    <Divider light />
-					    <br />
-						<Typography variant="body1" gutterBottom color="textPrimary">
-					        &emsp; &emsp; {this.state.overview.overview.Description}
-					    </Typography>
-				    </div>
+				    	<br />
+						{
+							this.props.news.map(news =>
+								<NewsFeed
+									url={news.image}
+									link={news.url}
+									title={news.title}
+									date={news.timestamp.split("T")[0]}
+									content={news.summary}
+									/>
+							)
+						}
+					</div>
+			      	<br />
+			      	
 			      </CardContent>
 			    </Card>
 			</div>

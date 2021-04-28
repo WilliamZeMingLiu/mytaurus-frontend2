@@ -29,6 +29,7 @@ class StockPage extends Component {
 			symbol: this.props.match.params.symbol,
 			overview: null,
 			historical: null,
+			news: null,
 		};
 	}
 
@@ -50,6 +51,8 @@ class StockPage extends Component {
 		const cryptoURL = "https://my-taurus.herokuapp.com/crypto/all";
 		const overviewURL = "https://my-taurus.herokuapp.com/stocks/overview";
 		const historicalURL = "https://my-taurus.herokuapp.com/stocks/daily";
+		const newsFeedURL = "https://my-taurus.herokuapp.com/stocks/news";
+
 		//"https://my-taurus.herokuapp.com/stocks/daily";
 		//"https://my-taurus.herokuapp.com/stocks/intraday";
 
@@ -67,6 +70,9 @@ class StockPage extends Component {
 			axios.get(cryptoURL, config),
 			axios.post(overviewURL, params, config),
 			axios.post(historicalURL, params, config),
+			axios.post(newsFeedURL, {
+				"symbol": this.state.symbol
+			}, config)
 			 //, overviewParams, config)
 		])
 			.then(responseArr => {
@@ -74,6 +80,8 @@ class StockPage extends Component {
 				const cryptoData = responseArr[1].data;
 				const overviewData = responseArr[2].data;
 				const historicalData = responseArr[3].data;
+				const newsData = responseArr[4].data;
+				//console.log(newsData);
 
 				this.setState({
 					token: token,
@@ -81,6 +89,7 @@ class StockPage extends Component {
 					portfolioValue: stockData['total-value'] + cryptoData['total-value'],
 					overview: overviewData,
 					historical: historicalData,
+					news: newsData.overview,
 				});
 			});
 	}
@@ -93,10 +102,20 @@ class StockPage extends Component {
 		}
 		return (
 			<div className="Home">
-				<NavBar component={StockDashboard} portfolioValue={this.state.portfolioValue} stock={this.state.stock} crypto={this.state.crypto} overview={this.state.overview} historical={this.state.historical} />
+				<NavBar 
+					component={StockDashboard} 
+					portfolioValue={this.state.portfolioValue} 
+					stock={this.state.stock} 
+					crypto={this.state.crypto} 
+					overview={this.state.overview} 
+					historical={this.state.historical}
+					news={this.state.news} />
 			</div>
 		);
   }
 }
 
 export default withRouter(StockPage);
+
+
+

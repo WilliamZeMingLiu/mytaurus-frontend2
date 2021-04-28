@@ -17,6 +17,7 @@ export default class Dashboard extends Component {
 			stock: this.props.stock,
 			crypto: this.props.crypto,
 			value: this.props.value,
+			newsFeed: this.props.newsFeed,
 		};
 	}
 
